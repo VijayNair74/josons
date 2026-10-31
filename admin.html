@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Josons Enquiries</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root{--leaf:#0F3D2E;--leaf2:#185A43;--gold:#C9A227;--turmeric:#E8A317;--chili:#B3261E;--cream:#FBF4E4;--card:#fff;--ink:#2A1A10;--muted:#6E5B4B;--line:#E7D9BC;--chip:#F2E7CF;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--cream);color:var(--ink);font:14px/1.5 Poppins,system-ui,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--leaf);color:var(--cream);border-bottom:3px solid var(--gold)}
+header .wrap{display:flex;align-items:center;gap:12px;padding-block:12px;flex-wrap:wrap}
+header img{width:40px;height:40px}
+h1{font:600 20px Lora,Georgia,serif;margin:0;flex:1}
+button,.btn{font:inherit;font-weight:600;font-size:13px;border-radius:999px;padding:9px 16px;min-height:40px;cursor:pointer;border:1.5px solid var(--leaf2);background:#fff;color:var(--leaf2);text-decoration:none;display:inline-flex;align-items:center}
+button.primary{background:var(--leaf2);color:#fff}
+button.danger{border-color:var(--chili);color:var(--chili)}
+button.danger.armed{background:var(--chili);color:#fff}
+header button{background:transparent;color:var(--cream);border-color:rgba(251,244,228,.5)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#login{max-width:360px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px}
+input,select,textarea{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px;background:#fff;color:var(--ink);width:100%}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
+.msg{min-height:1.3em;color:var(--chili);font-size:13px;margin:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:end;padding-block:16px}
+.bar label{flex:1 1 180px}
+.counts{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px}
+.counts span{background:var(--chip);border-radius:999px;padding:3px 10px;font-size:12px}
+.counts b{font-weight:600}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;padding-bottom:40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.due{border-color:var(--turmeric);box-shadow:inset 4px 0 0 var(--turmeric)}
+.top{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
+.top b{color:var(--ink);font-variant-numeric:tabular-nums}
+.who{font:600 17px Lora,Georgia,serif;color:var(--leaf);overflow-wrap:anywhere}
+.sub{font-size:12.5px;color:var(--muted)}
+ul{margin:0;padding-left:18px}
+.pill{display:inline-block;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.s-New{background:#FDE7C4;color:#7A4B00}.s-Quoted{background:#DCEBFF;color:#0B3D91}.s-Sample-sent{background:#EBDDF7;color:#4B2177}.s-Ordered{background:#D6F0E0;color:#0F5132}.s-Lost{background:#EEE;color:#555}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+.wa{background:#1F8F4E;border-color:#1F8F4E;color:#fff}
+.empty{padding:40px 0;color:var(--muted);text-align:center}
+.saved{font-size:11.5px;color:var(--leaf2);min-height:1em}
+</style>
+</head>
+<body>
+<header><div class="wrap"><img src="img/logo.png" alt=""><h1>Josons · Enquiries</h1><button type="button" id="out" hidden>Log out</button></div></header>
+
+<main class="wrap">
+  <form id="login">
+    <h2 style="font:600 22px Lora,serif;margin:0;color:var(--leaf)">Manu's enquiry desk</h2>
+    <label for="pw">Password<input id="pw" type="password" autocomplete="current-password"></label>
+    <button class="primary" type="submit">Open</button>
+    <p class="msg" id="lmsg" role="status"></p>
+  </form>
+
+  <section id="app" hidden>
+    <div class="bar">
+      <label for="fs">Status<select id="fs"><option value="">All</option><option>New</option><option>Quoted</option><option>Sample sent</option><option>Ordered</option><option>Lost</option><option value="due">Follow-up due</option></select></label>
+      <label for="fq">Search<input id="fq" type="search" placeholder="name, product, state…"></label>
+      <button type="button" id="refresh">Refresh</button>
+      <button type="button" id="csv">Export CSV</button>
+      <button type="button" class="danger" id="clearOld">Clear closed &gt; 30 days</button>
+      <button type="button" class="danger" id="clearAll">Delete all</button>
+    </div>
+    <p class="msg" id="amsg" role="status"></p>
+    <div class="counts" id="counts"></div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ST = ['New', 'Quoted', 'Sample sent', 'Ordered', 'Lost'];
+let key = '', rows = [];
+try { key = sessionStorage.getItem('jk') || ''; } catch (e) {}
+const today = () => new Date().toISOString().slice(0, 10);
+
+async function api(method, body) {
+  const r = await fetch('/api/admin/enquiries', { method, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+  if (r.status === 401) { logout('Wrong password.'); throw new Error('auth'); }
+  if (!r.ok) throw new Error('server');
+  return r.json();
+}
+function logout(msg) { key = ''; try { sessionStorage.removeItem('jk'); } catch (e) {} $('app').hidden = true; $('out').hidden = true; $('login').hidden = false; $('lmsg').textContent = msg || ''; }
+async function load() {
+  try { const d = await api('GET'); rows = d.enquiries; $('login').hidden = true; $('app').hidden = false; $('out').hidden = false; $('amsg').textContent = ''; draw(); }
+  catch (e) { if (e.message !== 'auth') $('lmsg').textContent = $('amsg').textContent = 'Could not reach the enquiry store. Check your connection and try again.'; }
+}
+const place = (r) => [r.loc_city, r.loc_region].filter(Boolean).join(', ') + (r.loc_country && r.loc_country !== 'IN' ? ` (${r.loc_country})` : '');
+function draw() {
+  const f = $('fs').value, q = $('fq').value.trim().toLowerCase(), t = today();
+  const counts = Object.fromEntries(ST.map((s) => [s, 0])); rows.forEach((r) => counts[r.status] = (counts[r.status] || 0) + 1);
+  const due = rows.filter((r) => r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status)).length;
+  $('counts').innerHTML = `<span><b>${rows.length}</b> total</span>` + ST.map((s) => `<span>${s}: <b>${counts[s]}</b></span>`).join('') + (due ? `<span style="background:#FDE7C4">Follow-up due: <b>${due}</b></span>` : '');
+  const vis = rows.filter((r) => {
+    if (f === 'due') { if (!(r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status))) return false; }
+    else if (f && r.status !== f) return false;
+    if (!q) return true;
+    return [r.id, r.name, r.business, r.state, r.btype, r.loc_city, r.loc_region, r.notes, r.admin_note, ...r.items.map((i) => i.product)].join(' ').toLowerCase().includes(q);
+  });
+  $('list').innerHTML = vis.length ? vis.map((r) => {
+    const isDue = r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status);
+    const ph = (r.phone || '').replace(/\D/g, ''); const wa = ph ? (ph.length === 10 ? '91' + ph : ph) : '';
+    const reply = encodeURIComponent(`Hello ${r.name || ''}, thank you for your enquiry ${r.id} to Josons Spices.`);
+    return `<article class="card${isDue ? ' due' : ''}" data-id="${esc(r.id)}">
+      <div class="top"><b>${esc(r.id)}</b><span>${new Date(r.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span></div>
+      <div><span class="pill s-${esc(r.status).replace(' ', '-')}">${esc(r.status)}</span></div>
+      <div class="who">${esc(r.name || 'No name')}${r.business ? ` · ${esc(r.business)}` : ''}</div>
+      <div class="sub">${[r.btype, r.state, r.phone].filter(Boolean).map(esc).join(' · ')}</div>
+      ${place(r) ? `<div class="sub" title="Approximate, from the visitor's internet connection">📍 ${esc(place(r))}</div>` : ''}
+      <ul>${r.items.map((i) => `<li>${esc(i.product)}${i.qty ? ` — ${esc(i.qty)} ${esc(i.unit)}` : ''}</li>`).join('')}</ul>
+      ${r.sample ? '<div class="sub"><b>Sample requested</b></div>' : ''}${r.notes ? `<div class="sub">“${esc(r.notes)}”</div>` : ''}
+      <div class="row">
+        <label>Status<select data-f="status">${ST.map((s) => `<option${s === r.status ? ' selected' : ''}>${s}</option>`).join('')}</select></label>
+        <label>Follow up on<input type="date" data-f="follow_up" value="${esc(r.follow_up || '')}"></label>
+      </div>
+      <label>Your note<textarea data-f="admin_note" rows="2" maxlength="500">${esc(r.admin_note || '')}</textarea></label>
+      <div class="saved"></div>
+      <div class="acts">${wa ? `<a class="btn wa" href="https://wa.me/${wa}?text=${reply}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="sub">No phone given</span>'}
+        <button type="button" class="danger" data-del>Delete</button></div>
+    </article>`; }).join('') : '<p class="empty">No enquiries here yet.</p>';
+}
+$('login').addEventListener('submit', (e) => { e.preventDefault(); key = $('pw').value; try { sessionStorage.setItem('jk', key); } catch (x) {} $('lmsg').textContent = ''; load(); });
+$('out').addEventListener('click', () => logout(''));
+$('refresh').addEventListener('click', load);
+$('fs').addEventListener('change', draw); $('fq').addEventListener('input', draw);
+$('list').addEventListener('change', async (e) => {
+  const f = e.target.dataset.f; if (!f) return;
+  const card = e.target.closest('.card'), id = card.dataset.id, r = rows.find((x) => x.id === id);
+  r[f] = e.target.value;
+  try { await api('PATCH', { id, [f]: e.target.value }); card.querySelector('.saved').textContent = 'Saved'; if (f !== 'admin_note') draw(); }
+  catch (x) { card.querySelector('.saved').textContent = 'Not saved — try again.'; }
+});
+// two-tap confirm for destructive buttons (no browser dialogs)
+function arm(btn, label, run) {
+  btn.addEventListener('click', async () => {
+    if (!btn.classList.contains('armed')) { btn.dataset.l = btn.textContent; btn.textContent = label; btn.classList.add('armed'); setTimeout(() => { btn.classList.remove('armed'); btn.textContent = btn.dataset.l; }, 4000); return; }
+    btn.classList.remove('armed'); btn.textContent = btn.dataset.l;
+    try { const r = await run(); $('amsg').textContent = `Deleted ${r.deleted} enquiries.`; load(); } catch (x) { $('amsg').textContent = 'Could not delete. Try again.'; }
+  });
+}
+arm($('clearOld'), 'Tap again to clear', () => api('DELETE', { olderThanDays: 30, closedOnly: true }));
+arm($('clearAll'), 'Tap again — deletes everything', () => api('DELETE', { all: true }));
+$('list').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-del]'); if (!b) return;
+  if (!b.classList.contains('armed')) { b.classList.add('armed'); b.textContent = 'Tap again to delete'; setTimeout(() => { b.classList.remove('armed'); b.textContent = 'Delete'; }, 4000); return; }
+  const id = b.closest('.card').dataset.id;
+  try { await api('DELETE', { ids: [id] }); rows = rows.filter((r) => r.id !== id); draw(); } catch (x) { $('amsg').textContent = 'Could not delete. Try again.'; }
+});
+$('csv').addEventListener('click', () => {
+  const head = ['id', 'created_at', 'status', 'follow_up', 'name', 'business', 'btype', 'state', 'loc_city', 'loc_region', 'loc_country', 'phone', 'items', 'sample', 'notes', 'admin_note'];
+  const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const body = rows.map((r) => head.map((h) => q(h === 'items' ? r.items.map((i) => `${i.product} ${i.qty} ${i.unit}`.trim()).join('; ') : r[h])).join(','));
+  const url = URL.createObjectURL(new Blob(['﻿' + [head.join(','), ...body].join('\n')], { type: 'text/csv' }));
+  const a = document.createElement('a'); a.href = url; a.download = `josons-enquiries-${today()}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+});
+if (key) load();
+</script>
+</body>
+</html>
