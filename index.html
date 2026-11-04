@@ -439,12 +439,20 @@ $('pdfBtn').addEventListener('click', async (e) => {
   try { await DL.save({ filename: info.file, data: await getPdf(info) }); }
   catch (err) { if (err && err.code !== 'declined') $('pdfMsg').textContent = 'The brochure could not be saved here. Please try again.'; }
 });
+// Phones only allow sharing straight after a tap, so the PDF is fetched ahead of time and the tap shares it immediately.
+let preT = null;
+function preloadPdf() { if (!canShareFiles) return; clearTimeout(preT); preT = setTimeout(() => { getPdf(pdfInfo()).catch(() => {}); }, 400); }
+function linkFallback(info) {
+  const url = new URL('pdf/' + info.file, location.href).href;
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(`Josons Spices brochure (${info.name}): ${url}`);
+  $('pdfMsg').innerHTML = `This phone could not attach the file. <a href="${wa}" target="_blank" rel="noopener"><b>Send the brochure link on WhatsApp</b></a> or use Download PDF.`;
+}
 $('pdfShare').addEventListener('click', async () => {
   const info = pdfInfo(); $('pdfMsg').textContent = '';
   try {
-    const file = new File([await getPdf(info)], info.file, { type: 'application/pdf' });
-    await navigator.share({ files: [file], title: 'Josons Spices brochure', text: 'Josons Spices, Aluva — product brochure' });
-  } catch (err) { if (err && err.name !== 'AbortError') $('pdfMsg').textContent = 'Sharing is not available on this device. Use Download PDF instead.'; }
+    const blob = pdfFor === info.file && pdfBlob ? pdfBlob : await getPdf(info);
+    await navigator.share({ files: [new File([blob], info.file, { type: 'application/pdf' })] });
+  } catch (err) { if (!err || err.name !== 'AbortError') linkFallback(info); }
 });
 const canShareFiles = !IN_ARTIFACT && navigator.canShare && navigator.canShare({ files: [new File([''], 'x.pdf', { type: 'application/pdf' })] });
 
@@ -458,7 +466,7 @@ function render() {
   const info = pdfInfo();
   $('pdfTitle').textContent = sel.value ? `Brochure for ${sel.value} · ${info.name} names` : (ABROAD ? 'Brochure · English' : 'Brochure · All India (English)');
   $('pdfBtn').href = 'pdf/' + info.file;
-  $('pdfShare').hidden = !canShareFiles;
+  $('pdfShare').hidden = !canShareFiles; preloadPdf();
   let html = '', n = 0, lastCat = '';
   D.products.forEach((p, i) => {
     if (cat !== 'all' && p.cat !== cat) return;
