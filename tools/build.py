@@ -66,7 +66,7 @@ def cat_page(grad, eyebrow, title, num, inner):
   {FOOT}{KASAVU}
 </section>'''
 
-PER_SPICE_PAGE, HERB_FIRST, PER_HERB_PAGE = 20, 6, 30
+PER_SPICE_PAGE, HERB_FIRST, PER_HERB_PAGE = 20, 0, 30
 sp = [card(*x, cls="sm") for x in SPICES]
 sp_notes = [note("Whole &amp; graded", "Premium, FAQ and seconds grades for every price point.", "var(--turmeric)"),
             note("Samples first", "Ask for a sample before you place a bulk order.", "var(--chili)"),
@@ -86,16 +86,19 @@ for i, ch in enumerate(sp_chunks):
     pn += 1
     CATALOGUE_PAGES += cat_page("var(--chili),#7d1a14", f"CATALOGUE · {pn:02d}", "Spices &amp; Aromatic Roots" + (" (continued)" if i else ""), pn,
                                 f'  <div class="grid grid5">{"".join(ch)}</div>')
+HERB_HEAD_P3 = '<div class="subhead"><div class="h3">Ayurvedic &amp; Herbal</div><span>For pharmacies, extractors &amp; traditional medicine makers</span></div>' if first_herb else ''
+HERB_GRID_P3 = f'<div class="grid grid6" style="padding-top:4mm">{"".join(first_herb)}</div>' if first_herb else ''
 pn += 1
-CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Nuts, Beans &amp; Herbal Raw Materials", pn,
+CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Nuts &amp; Beans" if not HERB_FIRST else "Nuts, Beans &amp; Herbal Raw Materials", pn,
     f'''  <div class="subhead"><div class="h3">Nuts &amp; Beans</div><span>Arecanut · coffee · cocoa · cashew</span></div>
   <div class="grid wide" style="padding-top:4mm">{nut_cards}</div>
-  <div class="subhead"><div class="h3">Ayurvedic &amp; Herbal</div><span>For pharmacies, extractors &amp; traditional medicine makers</span></div>
-  <div class="grid grid6" style="padding-top:4mm">{"".join(first_herb)}</div>''')
-for ch in rest_chunks:
+  {HERB_HEAD_P3}
+  {HERB_GRID_P3}''')
+for k, ch in enumerate(rest_chunks):
     pn += 1
-    CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Ayurvedic &amp; Herbal Raw Materials (continued)", pn,
-                                f'  <div class="grid grid6" style="padding-top:4mm">{"".join(ch)}</div>')
+    cont = bool(first_herb) or k > 0
+    CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Ayurvedic &amp; Herbal Raw Materials" + (" (continued)" if cont else ""), pn,
+                                (f'  <div class="subhead"><div class="h3">For pharmacies, extractors &amp; traditional medicine makers</div></div>' if not cont else '') + f'  <div class="grid grid6" style="padding-top:4mm">{"".join(ch)}</div>')
 
 html = f'''<!doctype html><html><head><meta charset="utf-8"><title>Josons Spices Brochure</title><style>
 @page {{ size: A4; margin: 0 }}

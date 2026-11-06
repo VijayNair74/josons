@@ -93,3 +93,9 @@ NATIVE.update({
  "silk_cotton": dict(hi="सेमल की रुई", ml="ഇലവ് പഞ്ഞി", ta="இலவம் பஞ்சு", te="బూరుగ పత్తి", kn="ಬೂರುಗ ಹತ್ತಿ"),
 })
 SA.update({"Karpasa-beeja": "कार्पास-बीज"})
+
+NATIVE.update({
+ "cashew_kernel": dict(hi="काजू गिरी", ml="അണ്ടിപ്പരിപ്പ്", ta="முந்திரிப் பருப்பு", te="జీడిపప్పు", kn="ಗೋಡಂಬಿ"),
+ "arecanut_husk": dict(ml="അടയ്ക്ക തൊണ്ടൻ"),
+ "cocoa_pods": dict(ml="കൊക്കോക്കായ"),
+})

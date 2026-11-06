@@ -37,9 +37,15 @@ NEW_HERBAL = [  # appended at the end
 NEW_NUTS = [  # inserted after the last Nuts & Beans item
     P('cotton-seed', 'Cotton Seed', 'Gossypium spp.', 'nuts', 'cotton_seed'),
     P('rubber-seed', 'Rubber Seed', 'Hevea brasiliensis', 'nuts', 'rubber_seed'),
+    P('cashew-kernels', 'Cashew Kernels', 'Shelled kernels', 'nuts', 'cashew_kernel'),
+    P('arecanut-with-husk', 'Arecanut with Husk (Adakka Thondan)', 'Whole, with husk', 'nuts', 'arecanut_husk'),
+    P('cocoa-pods', 'Cocoa Pods', 'Fresh pods (pacha)', 'nuts', 'cocoa_pods'),
 ]
 NEW_HERBAL.append(P('silk-cotton', 'Silk Cotton (Panchi)', 'Kapok floss', 'herbal', 'silk_cotton'))
 NEW_COMM = {
+ 'cashew_kernel': C('Cashew Kernels', 'Anacardium occidentale', '', dict(hi='Kaju giri', ml='Andiparippu', ta='Mundhiri paruppu', te='Jeedipappu', kn='Godambi'), ['Kaju', 'Cashew nut', 'Cashew kernel']),
+ 'arecanut_husk': C('Arecanut with Husk', 'Areca catechu', '', dict(ml='Adakka thondan'), ['Supari with husk', 'Betel nut with husk', 'Adakka thondan']),
+ 'cocoa_pods': C('Cocoa Pods', 'Theobroma cacao', '', dict(ml='Kokko kaya'), ['Cocoa pacha', 'Cacao pods', 'Cocco pacha']),
  'cotton_seed': C('Cotton Seed', 'Gossypium spp.', 'Karpasa-beeja', dict(hi='Binola', ml='Paruthikkuru', ta='Paruthi vidhai', te='Patthi ginjalu', kn='Hatti beeja'), ['Kapas ke beej', 'Binola']),
  'rubber_seed': C('Rubber Seed', 'Hevea brasiliensis', '', dict(hi='Rabar ke beej', ml='Rubber kuru', ta='Rubber vidhai', te='Rabbaru ginjalu', kn='Rabbar beeja'), ['Rubber kuru']),
  'silk_cotton': C('Silk Cotton (Panchi)', '[confirm species]', '', dict(hi='Semal ki rui', ml='Ilavu panchi', ta='Ilavam panju', te='Booruga patti', kn='Booruga hatti'), ['Panchi', 'Kapok', 'Ilavu', 'Semal']),
@@ -76,4 +82,4 @@ for _p in NEW_HERBAL:
     if _p['slug'] in ['chittaratta', 'maramanjal', 'idampiri-valampiri', 'soapnut', 'shikakai', 'thethankottai', 'neervalam', 'padakizhangu', 'dry-amla', 'pachotti-tholi', 'koova-starch', 'black-dammar', 'marotti-oil']: _p['img'] = 'img/q_%s.jpg' % _p['slug']
 
 for _p in NEW_NUTS + NEW_HERBAL:
-    if _p['slug'] in ('cotton-seed','rubber-seed','silk-cotton'): _p['img'] = 'img/q_%s.jpg' % _p['slug']
+    if _p['slug'] in ('cotton-seed','rubber-seed','silk-cotton','cashew-kernels','arecanut-with-husk','cocoa-pods'): _p['img'] = 'img/q_%s.jpg' % _p['slug']
