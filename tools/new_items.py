@@ -57,3 +57,9 @@ NEW_COMM = {
  'koova': C('Koova Starch (Arrowroot)', '[confirm species]', 'Tavakshiri', dict(hi='Tikhur', ml='Koova'), ['Arrowroot', 'Koova podi']),
  'black_dammar': C('Black Dammar (Thelli)', 'Canarium strictum', '', dict(hi='Kala dhoop', ml='Thelli', ta='Karunkungiliyam'), ['Thelli', 'Dammar']),
 }
+for _p in NEW_SPICES:
+    if _p['slug']=='cinnamon': _p['img']='img/q_cinn.jpg'  # AI-generated image, used with owner's OK; replace with Manu's own photo
+
+AI_IMG = ['dry-ginger', 'cardamom', 'cardamom-seeds', 'green-pepper', 'white-pepper', 'star-anise', 'vanilla', 'black-sesame', 'bay-leaf', 'clove-stem', 'tamarind-seedless', 'tamarind-with-seed', 'tamarind-seed']
+for _p in NEW_SPICES:
+    if _p['slug'] in AI_IMG: _p['img'] = 'img/q_%s.jpg' % _p['slug']
