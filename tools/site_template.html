@@ -268,7 +268,7 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
       <h2 style="font-size:clamp(26px,3.4vw,36px);color:var(--leaf);margin:6px 0 16px">Generations on the spice route.</h2>
       <p>Handed down from father to son, the family's spice trade in Aluva has carried the Josons name since 1995. We buy from growers across Kerala, sort every lot by hand, and supply buyers who need consistent quality at a fair price.</p>
       <p style="font-family:var(--serif);font-style:italic;color:var(--leaf)">"Every lot that leaves Aluva carries the Josons name. We would not send you anything we would not buy ourselves." <span style="font-family:var(--sans);font-style:normal;font-size:13px;color:var(--muted)">— Manu Dominic Parakkal, Proprietor</span></p>
-      <div class="stats"><div class="stat"><b>1995</b><span>Josons founded</span></div><div class="stat"><b>35</b><span>Products</span></div><div class="stat"><b>12</b><span>Languages</span></div></div>
+      <div class="stats"><div class="stat"><b>1995</b><span>Josons founded</span></div><div class="stat"><b id="statN">35</b><span>Products</span></div><div class="stat"><b>12</b><span>Languages</span></div></div>
     </div>
     <img src="img/tray.jpg" alt="Cloves, mace, black pepper and nutmeg in a wooden tray">
   </div>
@@ -301,7 +301,7 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
 </div></section>
 
 <section class="s" id="catalogue"><div class="wrap">
-  <div class="shead"><div class="eyebrow">Catalogue</div><h2>35 products, in the name you know</h2><p>Tap a product for its grades and local names.</p></div>
+  <div class="shead"><div class="eyebrow">Catalogue</div><h2><span id="catN">35</span> products, in the name you know</h2><p>Tap a product for its grades and local names.</p></div>
   <div class="ctools">
     <div class="tabs" role="group" aria-label="Category">
       <button type="button" data-cat="all" aria-pressed="true">All</button>
@@ -311,7 +311,7 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
     </div>
     <div class="search"><label for="q">Search in any language</label><input id="q" type="search" placeholder="e.g. jathikka, supari, kuchla" autocomplete="off"></div>
   </div>
-  <div class="pdfbar" id="pdfbar"><div><b id="pdfTitle">Brochure</b><span>6-page PDF · under 1 MB · ready to send on WhatsApp</span></div>
+  <div class="pdfbar" id="pdfbar"><div><b id="pdfTitle">Brochure</b><span>8-page PDF · under 1 MB · ready to send on WhatsApp</span></div>
     <div class="pdfbtns"><a class="btn gold" id="pdfBtn" href="pdf/Josons_Spices_English.pdf" target="_blank" rel="noopener">Download PDF</a><button class="btn wa" type="button" id="pdfShare" hidden>Send on WhatsApp</button></div></div>
   <p class="pdfmsg" id="pdfMsg" role="status"></p>
   <div class="howto" aria-label="How to order"><span><b>1</b>Tap <i>+ Enquire</i> on the products you need</span><span><b>2</b>Send one enquiry on WhatsApp</span><span><b>3</b>Get today's prices from us</span></div>
@@ -435,12 +435,20 @@ $('pdfBtn').addEventListener('click', async (e) => {
   try { await DL.save({ filename: info.file, data: await getPdf(info) }); }
   catch (err) { if (err && err.code !== 'declined') $('pdfMsg').textContent = 'The brochure could not be saved here. Please try again.'; }
 });
+// Phones only allow sharing straight after a tap, so the PDF is fetched ahead of time and the tap shares it immediately.
+let preT = null;
+function preloadPdf() { if (!canShareFiles) return; clearTimeout(preT); preT = setTimeout(() => { getPdf(pdfInfo()).catch(() => {}); }, 400); }
+function linkFallback(info) {
+  const url = new URL('pdf/' + info.file, location.href).href;
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(`Josons Spices brochure (${info.name}): ${url}`);
+  $('pdfMsg').innerHTML = `This phone could not attach the file. <a href="${wa}" target="_blank" rel="noopener"><b>Send the brochure link on WhatsApp</b></a> or use Download PDF.`;
+}
 $('pdfShare').addEventListener('click', async () => {
   const info = pdfInfo(); $('pdfMsg').textContent = '';
   try {
-    const file = new File([await getPdf(info)], info.file, { type: 'application/pdf' });
-    await navigator.share({ files: [file], title: 'Josons Spices brochure', text: 'Josons Spices, Aluva — product brochure' });
-  } catch (err) { if (err && err.name !== 'AbortError') $('pdfMsg').textContent = 'Sharing is not available on this device. Use Download PDF instead.'; }
+    const blob = pdfFor === info.file && pdfBlob ? pdfBlob : await getPdf(info);
+    await navigator.share({ files: [new File([blob], info.file, { type: 'application/pdf' })] });
+  } catch (err) { if (!err || err.name !== 'AbortError') linkFallback(info); }
 });
 const canShareFiles = !IN_ARTIFACT && navigator.canShare && navigator.canShare({ files: [new File([''], 'x.pdf', { type: 'application/pdf' })] });
 
@@ -454,7 +462,7 @@ function render() {
   const info = pdfInfo();
   $('pdfTitle').textContent = sel.value ? `Brochure for ${sel.value} · ${info.name} names` : (ABROAD ? 'Brochure · English' : 'Brochure · All India (English)');
   $('pdfBtn').href = 'pdf/' + info.file;
-  $('pdfShare').hidden = !canShareFiles;
+  $('pdfShare').hidden = !canShareFiles; preloadPdf();
   let html = '', n = 0, lastCat = '';
   D.products.forEach((p, i) => {
     if (cat !== 'all' && p.cat !== cat) return;
@@ -620,5 +628,6 @@ $('bkSend').addEventListener('click', (ev) => {
 });
 syncFab();
 render(); route();
+$('statN').textContent = $('catN').textContent = D.products.length;
 geoGuess();
 </script>

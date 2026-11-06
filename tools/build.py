@@ -57,12 +57,45 @@ def note(title, body, color):
 FOOT = '''<div class="foot"><span>JOSONS SPICES · Parakkal Buildings, Aluva, Kerala</span><span>+91 94470 29905 · manudparakkal@hotmail.com</span></div>'''
 KASAVU = '<div class="kasavu"></div>'
 
-spice_cards = "".join(card(*x, cls="sm") for x in SPICES)
-spice_cards += note("Whole &amp; graded", "Premium, FAQ and seconds grades for every price point.", "var(--turmeric)")
-spice_cards += note("Samples first", "Ask for a sample before you place a bulk order.", "var(--chili)")
-spice_cards += note("Current crop", "Ask us what is fresh in season right now.", "var(--leaf)")
+def cat_page(grad, eyebrow, title, num, inner):
+    return f'''<section class="page">
+  <div class="band" style="background:linear-gradient(120deg,{grad})">
+    <div class="sect">{eyebrow}</div><div class="h3">{title}</div><div class="pg">{num:02d}</div>
+  </div>
+{inner}
+  {FOOT}{KASAVU}
+</section>'''
+
+PER_SPICE_PAGE, HERB_FIRST, PER_HERB_PAGE = 20, 11, 30
+sp = [card(*x, cls="sm") for x in SPICES]
+sp_notes = [note("Whole &amp; graded", "Premium, FAQ and seconds grades for every price point.", "var(--turmeric)"),
+            note("Samples first", "Ask for a sample before you place a bulk order.", "var(--chili)"),
+            note("Current crop", "Ask us what is fresh in season right now.", "var(--leaf)")]
+sp_chunks = [sp[i:i + PER_SPICE_PAGE] for i in range(0, len(sp), PER_SPICE_PAGE)] or [[]]
+sp_chunks[-1] = sp_chunks[-1] + sp_notes
 nut_cards = "".join(card(*x) for x in NUTS) + note("Bulk ready", "Loose or packed to your spec — just ask.", "var(--leaf)")
-herb_cards = "".join(card(*x, cls="sm") for x in HERBAL) + note("Need more?", "Tell us what you need — we source on request.", "var(--mace)")
+herb = [card(*x, cls="sm") for x in HERBAL]
+herb_notes = [note("Need more?", "Tell us what you need — we source on request.", "var(--mace)")]
+first_herb, rest_herb = herb[:HERB_FIRST], herb[HERB_FIRST:]
+if not rest_herb: first_herb += herb_notes
+rest_chunks = [rest_herb[i:i + PER_HERB_PAGE] for i in range(0, len(rest_herb), PER_HERB_PAGE)]
+if rest_chunks: rest_chunks[-1] = rest_chunks[-1] + herb_notes
+
+CATALOGUE_PAGES = ""; pn = 0
+for i, ch in enumerate(sp_chunks):
+    pn += 1
+    CATALOGUE_PAGES += cat_page("var(--chili),#7d1a14", f"CATALOGUE · {pn:02d}", "Spices &amp; Aromatic Roots" + (" (continued)" if i else ""), pn,
+                                f'  <div class="grid grid5">{"".join(ch)}</div>')
+pn += 1
+CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Nuts, Beans &amp; Herbal Raw Materials", pn,
+    f'''  <div class="subhead"><div class="h3">Nuts &amp; Beans</div><span>Arecanut · coffee · cocoa · cashew</span></div>
+  <div class="grid wide" style="padding-top:4mm">{nut_cards}</div>
+  <div class="subhead"><div class="h3">Ayurvedic &amp; Herbal</div><span>For pharmacies, extractors &amp; traditional medicine makers</span></div>
+  <div class="grid grid6" style="padding-top:4mm">{"".join(first_herb)}</div>''')
+for ch in rest_chunks:
+    pn += 1
+    CATALOGUE_PAGES += cat_page("#8B4A2B,#4f2614", f"CATALOGUE · {pn:02d}", "Ayurvedic &amp; Herbal Raw Materials (continued)", pn,
+                                f'  <div class="grid grid6" style="padding-top:4mm">{"".join(ch)}</div>')
 
 html = f'''<!doctype html><html><head><meta charset="utf-8"><title>Josons Spices Brochure</title><style>
 @page {{ size: A4; margin: 0 }}
@@ -245,7 +278,7 @@ body {{ font-family:Poppins,sans-serif; color:var(--ink); -webkit-print-color-ad
   </div>
   <div class="stats">
     <div class="stat"><b>1995</b><span>Josons founded</span></div>
-    <div class="stat"><b>30+</b><span>Products</span></div>
+    <div class="stat"><b>60+</b><span>Products</span></div>
     <div class="stat"><b>3</b><span>Product categories</span></div>
   </div>
   <div class="why">
@@ -317,26 +350,7 @@ body {{ font-family:Poppins,sans-serif; color:var(--ink); -webkit-print-color-ad
   {FOOT}{KASAVU}
 </section>
 
-<!-- 4 SPICES -->
-<section class="page">
-  <div class="band" style="background:linear-gradient(120deg,var(--chili),#7d1a14)">
-    <div class="sect">CATALOGUE · 01</div><div class="h3">Spices &amp; Aromatic Roots</div><div class="pg">01</div>
-  </div>
-  <div class="grid grid5">{spice_cards}</div>
-  {FOOT}{KASAVU}
-</section>
-
-<!-- 4 NUTS + HERBAL -->
-<section class="page">
-  <div class="band" style="background:linear-gradient(120deg,#8B4A2B,#4f2614)">
-    <div class="sect">CATALOGUE · 02</div><div class="h3">Nuts, Beans &amp; Herbal Raw Materials</div><div class="pg">02</div>
-  </div>
-  <div class="subhead"><div class="h3">Nuts &amp; Beans</div><span>Arecanut · coffee · cocoa · cashew</span></div>
-  <div class="grid wide" style="padding-top:4mm">{nut_cards}</div>
-  <div class="subhead"><div class="h3">Ayurvedic &amp; Herbal</div><span>For pharmacies, extractors &amp; traditional medicine makers</span></div>
-  <div class="grid grid6" style="padding-top:4mm">{herb_cards}</div>
-  {FOOT}{KASAVU}
-</section>
+{CATALOGUE_PAGES}
 
 <!-- 5 BACK -->
 <section class="page back">

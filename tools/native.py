@@ -48,3 +48,41 @@ QUAL = {
  "second": dict(hi="दूसरी श्रेणी", ml="രണ്ടാംതരം", ta="இரண்டாம் தரம்", te="రెండవ రకం", kn="ಎರಡನೇ ದರ್ಜೆ", mr="दुय्यम", kok="दुय्यम", gu="બીજી ગુણવત્તા", bn="দ্বিতীয় মানের", **{"or": "ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ"}, **{"as": "দ্বিতীয় মানৰ"}, pa="ਦੂਜੀ ਕਿਸਮ"),
  "mysore": dict(hi="मैसूर", ml="മൈസൂർ", ta="மைசூர்", te="మైసూరు", kn="ಮೈಸೂರು", mr="म्हैसूर", kok="म्हैसूर", gu="મૈસૂર", bn="মহীশূর", **{"or": "ମହୀଶୂର"}, **{"as": "মহীশূৰ"}, pa="ਮੈਸੂਰ"),
 }
+
+# ---- Nov 2026: items added from Manu's stock list (first drafts, need a native-speaker check) ----
+NATIVE.update({
+ "cinnamon": dict(hi="दालचीनी", ml="കറുവപ്പട്ട", ta="பட்டை", te="దాల్చిన చెక్క", kn="ಚಕ್ಕೆ"),
+ "dry_ginger": dict(hi="सोंठ", ml="ചുക്ക്", ta="சுக்கு", te="శొంఠి", kn="ಸೊಂಠಿ"),
+ "cardamom": dict(hi="इलायची", ml="ഏലക്ക", ta="ஏலக்காய்", te="యాలకులు", kn="ಏಲಕ್ಕಿ"),
+ "star_anise": dict(hi="चक्रफूल", ml="തക്കോലം", ta="அன்னாசிப்பூ", te="అనాసపువ్వు"),
+ "vanilla": dict(hi="वनीला", ml="വാനില", ta="வெனிலா", te="వెనిలా", kn="ವೆನಿಲ್ಲಾ"),
+ "black_sesame": dict(hi="तिल", ml="എള്ള്", ta="எள்", te="నువ్వులు", kn="ಎಳ್ಳು"),
+ "bay_leaf": dict(hi="तेज पत्ता", ta="பிரிஞ்சி இலை"),
+ "clove_stem": dict(hi="लौंग की डंडी", ml="ഗ്രാമ്പൂ തണ്ട്", ta="கிராம்பு தண்டு"),
+ "tamarind": dict(hi="इमली", ml="വാളൻപുളി", ta="புளி", te="చింతపండు", kn="ಹುಣಸೆ"),
+ "chittaratta": dict(hi="छोटा कुलंजन", ml="ചിറ്റരത്ത", ta="சிற்றரத்தை"),
+ "maramanjal": dict(ml="മരമഞ്ഞൾ", ta="மரமஞ்சள்"),
+ "idampiri": dict(hi="मरोड़फली", ml="ഇടമ്പിരി വലമ്പിരി"),
+ "soapnut": dict(hi="रीठा", ta="பூந்திக்கொட்டை", te="కుంకుడు కాయ", kn="ಅಂಟುವಾಳ"),
+ "shikakai": dict(hi="शिकाकाई", ml="ചീയക്ക", ta="சீயக்காய்", te="శీకాయ", kn="ಶೀಗೆಕಾಯಿ"),
+ "thethankottai": dict(hi="निर्मली", ml="തേറ്റാമ്പരൽ", ta="தேற்றான் கொட்டை"),
+ "neervalam": dict(hi="जमालगोटा", ml="നീർവാളം", ta="நெர்வாளம்"),
+ "padakizhangu": dict(hi="पाठा", ml="പാടക്കിഴങ്ങ്"),
+ "dry_amla": dict(hi="आंवला", ml="നെല്ലിക്ക", ta="நெல்லிக்காய்", te="ఉసిరికాయ", kn="ನೆಲ್ಲಿಕಾಯಿ"),
+ "pachotti": dict(hi="लोध", ml="പാച്ചോറ്റി"),
+ "koova": dict(hi="तीखुर", ml="കൂവ"),
+ "black_dammar": dict(hi="काला धूप", ml="തെള്ളി", ta="கருங்குங்கிலியம்"),
+})
+SA.update({"Tvak": "त्वक्", "Shunthi": "शुण्ठी", "Ela": "एला", "Tila": "तिल", "Tamalapatra": "तमालपत्र", "Amlika": "अम्लिका", "Avartani": "आवर्तनी",
+           "Arishtaka": "अरिष्टक", "Kataka": "कतक", "Jayapala": "जयपाल", "Patha": "पाठा", "Amalaki": "आमलकी", "Lodhra": "लोध्र", "Tavakshiri": "तवक्षीरी"})
+PQ.update({"Cardamom Seeds": "seeds", "Green Pepper": "green", "White Pepper": "white", "Tamarind (Seedless)": "seedless", "Tamarind (with Seed)": "seeded",
+           "Tamarind Seed": "seedonly", "Marotti Oil (Chalmogra Oil)": "oil"})
+QUAL.update({
+ "seeds": dict(hi="बीज", ml="വിത്ത്", ta="விதை", te="గింజలు", kn="ಬೀಜ"),
+ "green": dict(hi="हरी", ml="പച്ച", ta="பச்சை", te="పచ్చి", kn="ಹಸಿರು", mr="हिरवी", gu="લીલા", bn="সবুজ", pa="ਹਰੀ"),
+ "white": dict(hi="सफ़ेद", ml="വെള്ള", ta="வெள்ளை", te="తెల్ల", kn="ಬಿಳಿ", mr="पांढरी", kok="धवी", gu="સફેદ", bn="সাদা", **{"or": "ଧଳା"}, **{"as": "বগা"}, pa="ਚਿੱਟੀ"),
+ "seedless": dict(hi="बिना बीज", ml="കുരുവില്ലാത്ത", ta="கொட்டையில்லாத", te="గింజలు లేని", kn="ಬೀಜರಹಿತ"),
+ "seeded": dict(hi="बीज सहित", ml="കുരുവോടെ", ta="கொட்டையுடன்", te="గింజలతో", kn="ಬೀಜಸಹಿತ"),
+ "seedonly": dict(hi="बीज", ml="കുരു", ta="கொட்டை", te="గింజ", kn="ಬೀಜ"),
+ "oil": dict(hi="तेल", ml="എണ്ണ", ta="எண்ணெய்", te="నూనె", kn="ಎಣ್ಣೆ", mr="तेल", kok="तेल", gu="તેલ", bn="তেল", **{"or": "ତେଲ"}, **{"as": "তেল"}, pa="ਤੇਲ"),
+})
