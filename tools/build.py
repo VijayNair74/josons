@@ -66,7 +66,7 @@ def cat_page(grad, eyebrow, title, num, inner):
   {FOOT}{KASAVU}
 </section>'''
 
-PER_SPICE_PAGE, HERB_FIRST, PER_HERB_PAGE = 20, 11, 30
+PER_SPICE_PAGE, HERB_FIRST, PER_HERB_PAGE = 20, 6, 30
 sp = [card(*x, cls="sm") for x in SPICES]
 sp_notes = [note("Whole &amp; graded", "Premium, FAQ and seconds grades for every price point.", "var(--turmeric)"),
             note("Samples first", "Ask for a sample before you place a bulk order.", "var(--chili)"),
@@ -163,8 +163,8 @@ body {{ font-family:Poppins,sans-serif; color:var(--ink); -webkit-print-color-ad
 .band .sect {{ color:var(--turmeric) }}
 .band .h3 {{ color:var(--cream); margin:1mm 0 0 }}
 .band .pg {{ position:absolute; right:14mm; top:15mm; font-family:Lora; font-size:30pt; opacity:.25 }}
-.grid {{ display:grid; grid-template-columns:repeat(4,1fr); gap:4mm; padding:6mm 14mm 0 }}
-.grid5 {{ grid-template-columns:repeat(5,1fr); gap:3.2mm }}
+.grid {{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4mm; padding:6mm 14mm 0 }}
+.grid5 {{ grid-template-columns:repeat(5,minmax(0,1fr)); gap:3.2mm }}
 .card {{ background:#fff; border-radius:3mm; padding:2mm 2mm 3mm; border:.3mm solid #eadcbf }}
 .ph {{ width:100%; aspect-ratio:1/1; border-radius:2mm; background-size:cover; background-position:center }}
 .nm {{ font-weight:600; font-size:8.6pt; margin-top:2mm; color:var(--leaf); line-height:1.2 }}
@@ -217,7 +217,7 @@ body {{ font-family:Poppins,sans-serif; color:var(--ink); -webkit-print-color-ad
 .cr b {{ font-size:9.5pt; font-weight:500 }}
 .cta {{ margin:5mm 14mm 0; padding:3mm 5mm; background:var(--mace); color:#fff; border-radius:2.5mm; font-size:9pt; font-weight:600 }}
 .wide .ph {{ aspect-ratio:4/3 }}
-.grid6 {{ grid-template-columns:repeat(6,1fr); gap:2.8mm }}
+.grid6 {{ grid-template-columns:repeat(6,minmax(0,1fr)); gap:2.8mm }}
 .grid6 .nt {{ font-size:10.5pt }} .grid6 .nb {{ font-size:7pt }}
 .grid5 .nt {{ font-size:11.5pt }}
 /* BACK */

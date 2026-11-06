@@ -1,14 +1,16 @@
 import re, json, sys
 sys.path.insert(0,'/root/site')
 from native import NATIVE, SA, PQ, QUAL
-from new_items import NEW_SPICES, NEW_HERBAL, NEW_COMM
+from new_items import NEW_SPICES, NEW_HERBAL, NEW_NUTS, NEW_COMM
 out='/home/claude/josons_site/index.html'
 old=open(out,encoding='utf-8').read()
 m=re.search(r'const D = (\{.*?\});\n',old,re.S)
 D=json.loads(m.group(1))
 # text-only new items go after the photographed ones (re-added each build so their order stays fixed)
-NEW={p['slug'] for p in NEW_SPICES+NEW_HERBAL}
+NEW={p['slug'] for p in NEW_SPICES+NEW_HERBAL+NEW_NUTS}
 D['products']=[p for p in D['products'] if p['slug'] not in NEW]+NEW_SPICES+NEW_HERBAL
+_i=max(i for i,p in enumerate(D['products']) if p['cat']=='nuts')+1
+D['products'][_i:_i]=NEW_NUTS
 for cid,c in NEW_COMM.items(): D['comm'].setdefault(cid,dict(c))
 for cid,c in D['comm'].items():
     nat={k:v for k,v in NATIVE.get(cid,{}).items() if k in c['names']}

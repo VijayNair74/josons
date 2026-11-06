@@ -34,7 +34,15 @@ NEW_HERBAL = [  # appended at the end
     P('black-dammar', 'Black Dammar (Thelli)', 'Canarium strictum · resin', 'herbal', 'black_dammar'),
     P('marotti-oil', 'Marotti Oil (Chalmogra Oil)', 'Hydnocarpus oil', 'herbal', 'marotti', True),
 ]
+NEW_NUTS = [  # inserted after the last Nuts & Beans item
+    P('cotton-seed', 'Cotton Seed', 'Gossypium spp.', 'nuts', 'cotton_seed'),
+    P('rubber-seed', 'Rubber Seed', 'Hevea brasiliensis', 'nuts', 'rubber_seed'),
+]
+NEW_HERBAL.append(P('silk-cotton', 'Silk Cotton (Panchi)', 'Kapok floss', 'herbal', 'silk_cotton'))
 NEW_COMM = {
+ 'cotton_seed': C('Cotton Seed', 'Gossypium spp.', 'Karpasa-beeja', dict(hi='Binola', ml='Paruthikkuru', ta='Paruthi vidhai', te='Patthi ginjalu', kn='Hatti beeja'), ['Kapas ke beej', 'Binola']),
+ 'rubber_seed': C('Rubber Seed', 'Hevea brasiliensis', '', dict(hi='Rabar ke beej', ml='Rubber kuru', ta='Rubber vidhai', te='Rabbaru ginjalu', kn='Rabbar beeja'), ['Rubber kuru']),
+ 'silk_cotton': C('Silk Cotton (Panchi)', '[confirm species]', '', dict(hi='Semal ki rui', ml='Ilavu panchi', ta='Ilavam panju', te='Booruga patti', kn='Booruga hatti'), ['Panchi', 'Kapok', 'Ilavu', 'Semal']),
  'cinnamon': C('Cinnamon', '[confirm species]', 'Tvak', dict(hi='Dalchini', ml='Karuvapatta', ta='Pattai', te='Dalchina chekka', kn='Chakke'), ['Cassia', 'Dalchini']),
  'dry_ginger': C('Dry Ginger', 'Zingiber officinale', 'Shunthi', dict(hi='Sonth', ml='Chukku', ta='Sukku', te='Sonthi', kn='Sonthi'), ['Sukku', 'Saunth']),
  'cardamom': C('Cardamom', 'Elettaria cardamomum', 'Ela', dict(hi='Elaichi', ml='Elakka', ta='Elakkai', te='Yalakulu', kn='Elakki'), ['Elachi', 'Cardamon']),
@@ -63,3 +71,9 @@ for _p in NEW_SPICES:
 AI_IMG = ['dry-ginger', 'cardamom', 'cardamom-seeds', 'green-pepper', 'white-pepper', 'star-anise', 'vanilla', 'black-sesame', 'bay-leaf', 'clove-stem', 'tamarind-seedless', 'tamarind-with-seed', 'tamarind-seed']
 for _p in NEW_SPICES:
     if _p['slug'] in AI_IMG: _p['img'] = 'img/q_%s.jpg' % _p['slug']
+
+for _p in NEW_HERBAL:
+    if _p['slug'] in ['chittaratta', 'maramanjal', 'idampiri-valampiri', 'soapnut', 'shikakai', 'thethankottai', 'neervalam', 'padakizhangu', 'dry-amla', 'pachotti-tholi', 'koova-starch', 'black-dammar', 'marotti-oil']: _p['img'] = 'img/q_%s.jpg' % _p['slug']
+
+for _p in NEW_NUTS + NEW_HERBAL:
+    if _p['slug'] in ('cotton-seed','rubber-seed','silk-cotton'): _p['img'] = 'img/q_%s.jpg' % _p['slug']
