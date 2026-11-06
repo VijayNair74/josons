@@ -1,0 +1,97 @@
+# Josons Spices
+
+> Family-run wholesale supplier of whole spices, nuts, beans and Ayurvedic raw materials, based in Aluva, Kerala, India. Prices on request. Enquiries by WhatsApp +91 94470 29905, phone +91 484 262 3585 or manudparakkal@hotmail.com.
+
+The catalogue has 68 products. Product names are shown in 12 Indian languages. Brochures are available as PDF in English and 12 Indian languages.
+
+## Pages
+- [Catalogue and enquiry](https://josons.pages.dev/#catalogue): all products, search in any language, enquiry cart that sends one WhatsApp message
+
+## Brochures (PDF, 8 pages)
+- [Assamese](https://josons.pages.dev/pdf/Josons_Spices_Assamese.pdf)
+- [Bengali](https://josons.pages.dev/pdf/Josons_Spices_Bengali.pdf)
+- [English](https://josons.pages.dev/pdf/Josons_Spices_English.pdf)
+- [Gujarati](https://josons.pages.dev/pdf/Josons_Spices_Gujarati.pdf)
+- [Hindi](https://josons.pages.dev/pdf/Josons_Spices_Hindi.pdf)
+- [Kannada](https://josons.pages.dev/pdf/Josons_Spices_Kannada.pdf)
+- [Konkani](https://josons.pages.dev/pdf/Josons_Spices_Konkani.pdf)
+- [Malayalam](https://josons.pages.dev/pdf/Josons_Spices_Malayalam.pdf)
+- [Marathi](https://josons.pages.dev/pdf/Josons_Spices_Marathi.pdf)
+- [Odia](https://josons.pages.dev/pdf/Josons_Spices_Odia.pdf)
+- [Punjabi](https://josons.pages.dev/pdf/Josons_Spices_Punjabi.pdf)
+- [Tamil](https://josons.pages.dev/pdf/Josons_Spices_Tamil.pdf)
+- [Telugu](https://josons.pages.dev/pdf/Josons_Spices_Telugu.pdf)
+
+## Spices & Roots
+- Alleppey Turmeric: Curcuma longa
+- Black Pepper: Piper nigrum
+- Long Pepper: Piper longum
+- Chavya (Pepper Stem): Piper chaba (syn. P. retrofractum), stems
+- Allspice: Pimenta dioica
+- Cloves: Syzygium aromaticum
+- Mace Flower: Whole mace
+- Mace Slice: Ordinary · slice
+- Nutmeg: Whole, shelled
+- Nutmeg with Shell: Whole, in shell
+- Nutmeg Splits: Second quality · splits
+- Nutmeg Shell Seconds: Extraction quality
+- Wild Turmeric: Curcuma aromatica
+- Ambahaldi: Boiled & dried
+- Galangal Root: Alpinia galanga
+- Zedoary: Curcuma zedoaria
+- Kudampuli (Malabar Tamarind): Garcinia gummi-gutta
+- Cinnamon: Bark
+- Dry Ginger: Zingiber officinale
+- Cardamom: Dry · green
+- Cardamom Seeds: Decorticated seeds
+- Green Pepper: Piper nigrum · green
+- White Pepper: Piper nigrum · white
+- Star Anise: Illicium verum
+- Vanilla: Vanilla planifolia · beans
+- Black Sesame: Sesamum indicum
+- Bay Leaf: Cinnamomum tamala
+- Clove Stem: Clove sticks
+- Tamarind (Seedless): Cleaned, seedless
+- Tamarind (with Seed): Whole pods, seeded
+- Tamarind Seed: Tamarindus indica
+
+## Nuts & Beans
+- Arecanut: Whole, first quality
+- Badala Arecanut: Second quality
+- Mysore Arecanut: Pooja grade · small
+- Coffee Beans: Clean green beans
+- Coffee with Shell: Whole dried cherry
+- Cocoa Beans: Theobroma cacao
+- Raw Cashew: Anacardium occidentale
+- Cotton Seed: Gossypium spp.
+- Rubber Seed: Hevea brasiliensis
+- Cashew Kernels: Shelled kernels
+- Arecanut with Husk (Adakka Thondan): Whole, with husk
+- Cocoa Pods: Fresh pods (pacha)
+
+## Ayurvedic & Herbal
+- Samudraphal: Barringtonia acutangula
+- Triphal: Zanthoxylum rhetsa
+- Poolamuttu: No. 1 grade
+- Marotty Kuru: Hydnocarpus pentandrus
+- Nux Vomica: Strychnos nux-vomica
+- Cocculus Seeds: Anamirta cocculus
+- Varigar: 
+- Rampatri: Myristica malabarica (aril)
+- Ramgot: Myristica malabarica (seed)
+- Madhana Poo: Cycas circinalis
+- Gotti Nagkesar: Mammea longifolia? / Mesua ferrea?
+- Chittaratta (Lesser Galangal): Alpinia calcarata
+- Maramanjal (Tree Turmeric): Coscinium fenestratum
+- Idampiri Valampiri: Helicteres isora
+- Soapnut (Reetha): Sapindus spp.
+- Shikakai: Acacia concinna
+- Thethankottai (Clearing Nut): Strychnos potatorum
+- Neervalam (Croton Seed): Croton tiglium
+- Padakizhangu (Pareira Root): Cyclea peltata
+- Dry Amla (Nellikka): Phyllanthus emblica
+- Pachotti Tholi (Lodhra Bark): Symplocos racemosa
+- Koova Starch (Arrowroot): Powder
+- Black Dammar (Thelli): Canarium strictum · resin
+- Marotti Oil (Chalmogra Oil): Hydnocarpus oil
+- Silk Cotton (Panchi): Kapok floss

@@ -20,6 +20,8 @@ for cid,c in D['comm'].items():
     for k,v in nat.items(): assert len(v.split(' / '))==len(c['names'][k].split(' / ')),(cid,k,v,c['names'][k])
     miss=[k for k in c['names'] if k not in nat]
     if miss: print('no native:',cid,miss)
+for _c in D['comm'].values():
+    if '[' in _c.get('bot',''): _c['bot']=''   # internal notes never ship to the public page
 D['qual']=QUAL
 for pr in D['products']:
     pr.pop('q',None)
@@ -28,5 +30,7 @@ for pr in D['products']:
 print('qualified:',[pr['name'] for pr in D['products'] if 'q' in pr])
 json.dump({k:D[k] for k in ('langs','states','products','comm')},open('/root/site/site_data.json','w',encoding='utf-8'),ensure_ascii=False)
 tpl=open('/root/site/site_template.html',encoding='utf-8').read()
+import seo
+tpl=seo.apply(tpl,D)
 open(out,'w',encoding='utf-8').write(tpl.replace('__DATA__',json.dumps(D,ensure_ascii=False)))
 print('built', sum(len(c['native']) for c in D['comm'].values()),'native names')
