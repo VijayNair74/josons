@@ -57,7 +57,7 @@ def apply(tpl, D):
     open('/root/site/seo/robots.txt', 'w').write(f'User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /api/\n\nSitemap: {SITE}/sitemap.xml\n')
     L = ['# Josons Spices', '', '> Family-run wholesale supplier of whole spices, nuts, beans and Ayurvedic raw materials, based in Aluva, Kerala, India. Prices on request. Enquiries by WhatsApp +91 94470 29905, phone +91 484 262 3585 or manudparakkal@hotmail.com.', '',
          f'The catalogue has {n} products. Product names are shown in 12 Indian languages. Brochures are available as PDF in English and 12 Indian languages.', '', '## Pages', f'- [Catalogue and enquiry]({SITE}/#catalogue): all products, search in any language, enquiry cart that sends one WhatsApp message', '', '## Brochures (PDF, 8 pages)']
-    L += [f'- [{os.path.basename(f)[14:-4]}]({SITE}/pdf/{os.path.basename(f)})' for f in pdfs]
+    L += [f'- [{os.path.basename(f)[14:-4].replace('_Phone',' (phone format)')}]({SITE}/pdf/{os.path.basename(f)})' for f in pdfs]
     for k, name in CAT.items():
         L += ['', f'## {name}'] + [f'- {p["name"]}: {p["sub"]}' for p in P if p['cat'] == k]
     open('/root/site/seo/llms.txt', 'w').write('\n'.join(L) + '\n')

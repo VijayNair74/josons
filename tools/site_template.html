@@ -147,6 +147,9 @@ section.s{padding-block:64px}
 .pdfbar b{display:block;font-family:var(--serif);font-size:18px;font-weight:600}
 .pdfbar span{font-size:12.5px;color:#D9CEB5}
 .pdfbtns{display:flex;flex-wrap:wrap;gap:8px}
+.pdfmode{display:inline-flex;margin-top:8px;border:1px solid #D9CEB5;border-radius:20px;overflow:hidden}
+.pdfmode button{font:inherit;font-size:12.5px;padding:5px 14px;background:transparent;color:var(--cream);border:0;cursor:pointer}
+.pdfmode button[aria-pressed=true]{background:var(--gold);color:var(--leaf);font-weight:600}
 .pdfmsg{min-height:1.4em;margin:0 0 6px;font-size:12.5px;color:var(--chili)}
 /* order */
 .order{background:var(--leaf);color:var(--cream)}
@@ -311,7 +314,8 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
     </div>
     <div class="search"><label for="q">Search in any language</label><input id="q" type="search" placeholder="e.g. jathikka, supari, kuchla" autocomplete="off"></div>
   </div>
-  <div class="pdfbar" id="pdfbar"><div><b id="pdfTitle">Brochure</b><span>8-page PDF · under 1 MB · ready to send on WhatsApp</span></div>
+  <div class="pdfbar" id="pdfbar"><div><b id="pdfTitle">Brochure</b><span id="pdfDesc">8-page PDF · under 1 MB · ready to send on WhatsApp</span>
+    <div class="pdfmode" role="group" aria-label="Brochure format"><button type="button" data-mode="phone" aria-pressed="false">Phone</button><button type="button" data-mode="a4" aria-pressed="false">Print (A4)</button></div></div>
     <div class="pdfbtns"><a class="btn gold" id="pdfBtn" href="pdf/Josons_Spices_English.pdf" target="_blank" rel="noopener">Download PDF</a><button class="btn wa" type="button" id="pdfShare" hidden>Send on WhatsApp</button></div></div>
   <p class="pdfmsg" id="pdfMsg" role="status"></p>
   <div class="howto" aria-label="How to order"><span><b>1</b>Tap <i>+ Enquire</i> on the products you need</span><span><b>2</b>Send one enquiry on WhatsApp</span><span><b>3</b>Get today's prices from us</span></div>
@@ -422,7 +426,10 @@ const HAY = D.products.map(hay);
 const IN_ARTIFACT = !!(window.claude && window.claude.use);
 let DL = null, pdfBlob = null, pdfFor = '';
 if (IN_ARTIFACT) window.claude.use('downloads').then((d) => { DL = d; render(); }).catch(() => {});
-function pdfInfo() { const lang = langOf(); const name = LANG[lang] || 'English'; return { file: `Josons_Spices_${name}.pdf`, name }; }
+let pdfMode = 'a4'; try { if (matchMedia('(max-width:760px)').matches) pdfMode = 'phone'; } catch (e) {}
+function pdfInfo() { const lang = langOf(); const name = LANG[lang] || 'English'; return { file: `Josons_Spices_${name}${pdfMode === 'phone' ? '_Phone' : ''}.pdf`, name }; }
+function pdfModeUi() { document.querySelectorAll('.pdfmode button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === pdfMode))); $('pdfDesc').textContent = pdfMode === 'phone' ? '15 pages sized for phones · about 1.4 MB · tap a product to enquire on WhatsApp' : '8-page A4 PDF · under 1 MB · best for printing'; }
+document.querySelectorAll('.pdfmode button').forEach((b) => b.addEventListener('click', () => { pdfMode = b.dataset.mode; pdfModeUi(); $('pdfBtn').href = 'pdf/' + pdfInfo().file; $('pdfMsg').textContent = ''; preloadPdf(); }));
 async function getPdf(info) {
   if (pdfFor !== info.file) { const r = await fetch('pdf/' + info.file); if (!r.ok) throw new Error('fetch'); pdfBlob = await r.blob(); pdfFor = info.file; }
   return pdfBlob;
@@ -461,7 +468,7 @@ function render() {
   if (lang === 'en' && sel.value) $('langline').innerHTML = `${esc(sel.value)} has no single trade language, so English and trade names are shown.`;
   const info = pdfInfo();
   $('pdfTitle').textContent = sel.value ? `Brochure for ${sel.value} · ${info.name} names` : (ABROAD ? 'Brochure · English' : 'Brochure · All India (English)');
-  $('pdfBtn').href = 'pdf/' + info.file;
+  $('pdfBtn').href = 'pdf/' + info.file; pdfModeUi();
   $('pdfShare').hidden = !canShareFiles; preloadPdf();
   let html = '', n = 0, lastCat = '';
   D.products.forEach((p, i) => {
