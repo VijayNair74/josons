@@ -202,14 +202,14 @@ const lsGet = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e)
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 
 function toast(t) { const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
-async function api(path, method = 'GET', body) {
-  const r = await fetch('/api/admin/' + path, { method, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+async function api(path, method = 'GET', body, ms) {
+  const r = await fetch('/api/admin/' + path, { method, signal: ms ? AbortSignal.timeout(ms) : undefined, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
   if (r.status === 401) { logout('Wrong password.'); throw new Error('auth'); }
   const d = await r.json().catch(() => ({}));
   if (!r.ok) { const e = new Error(d.error || 'server'); e.data = d; throw e; }
   return d;
 }
-const crm = (p, m, b) => api('crm/' + p, m, b);
+const crm = (p, m, b, ms) => api('crm/' + p, m, b, ms);
 function logout(msg) { key = ''; try { localStorage.removeItem('jk'); sessionStorage.removeItem('jk'); } catch (e) {} $('app').hidden = true; $('tabs').hidden = true; $('fab').hidden = true; $('login').hidden = false; $('lmsg').textContent = msg || ''; closeOverlays(); }
 async function load(first) {
   try {
@@ -433,7 +433,7 @@ function mic(btn, ta, sel) {
 }
 mic($('lgMic'), $('lgText'), $('lgLang')); mic($('chMic'), $('chText'), $('chLang'));
 /* ---------- AI chat ---------- */
-let chat = [], chatBusy = false;
+let chat = [], chatBusy = false, chatT0 = 0, chatTick = null;
 const SUG = ['Who should I follow up today?', 'Give me a pipeline summary', 'Which customers have we done business with?'];
 function openChat() {
   const c = S.lead != null && S.tab === 'lead' ? S.detail?.company : null;
@@ -453,18 +453,18 @@ function propHtml(p, i, mi) {
 function drawChat() {
   const log = $('chatlog');
   if (!chat.length) { log.innerHTML = `<div class="bub a">Hi Manu! Tell me about a call or message and I'll prepare the note for you to confirm. You can also ask me things like “who haven't I called yet in Gujarat?”.</div><div class="chips">${SUG.map((s) => `<button type="button" class="sm" data-sug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; return; }
-  log.innerHTML = chat.map((m, mi) => m.role === 'user' ? bub(m.content, 'u') : bub(m.content, 'a') + (m.props || []).map((p, i) => m.done?.[i] ? `<div class="prop done">✓ ${p.type === 'log' ? 'Conversation saved' : p.type === 'update' ? 'Updated' : 'Added'}: ${esc(p.company || p.fields?.company || '')}</div>` : m.skip?.[i] ? '' : propHtml(p, i, mi)).join('')).join('') + (chatBusy ? '<div class="bub a">…</div>' : '');
+  log.innerHTML = chat.map((m, mi) => m.role === 'user' ? bub(m.content, 'u') : bub(m.content, 'a') + (m.props || []).map((p, i) => m.done?.[i] ? `<div class="prop done">✓ ${p.type === 'log' ? 'Conversation saved' : p.type === 'update' ? 'Updated' : 'Added'}: ${esc(p.company || p.fields?.company || '')}</div>` : m.skip?.[i] ? '' : propHtml(p, i, mi)).join('')).join('') + (chatBusy ? `<div class="bub a" id="busyBub">Working on it… ${Math.round((Date.now() - chatT0) / 1000)}s</div>` : '');
   log.scrollTop = log.scrollHeight;
 }
 async function sendChat(text) {
   text = (text || $('chText').value).trim(); if (!text || chatBusy) return;
-  $('chText').value = ''; chat.push({ role: 'user', content: text }); chatBusy = true; drawChat();
+  $('chText').value = ''; chat.push({ role: 'user', content: text }); chatBusy = true; chatT0 = Date.now(); drawChat(); chatTick = setInterval(() => { const b = $('busyBub'); if (b) b.textContent = `Working on it… ${Math.round((Date.now() - chatT0) / 1000)}s`; }, 1000);
   try {
     const msgs = chat.map((m) => ({ role: m.role, content: m.content }));
-    const r = await crm('ai', 'POST', { messages: msgs, company_id: S.tab === 'lead' ? S.lead : undefined });
+    const r = await crm('ai', 'POST', { messages: msgs, company_id: S.tab === 'lead' ? S.lead : undefined }, 70000);
     chat.push({ role: 'assistant', content: r.reply, props: r.proposals || [], done: {}, skip: {}, orig: text });
-  } catch (e) { if (e.message === 'auth') return; chat.push({ role: 'assistant', content: e.message && e.message !== 'server' ? e.message : 'Something went wrong. Please try again.' }); }
-  chatBusy = false; drawChat();
+  } catch (e) { if (e.message === 'auth') { clearInterval(chatTick); return; } chat.push({ role: 'assistant', content: e.name === 'TimeoutError' ? 'The AI is taking too long. Please try again.' : e.message && e.message !== 'server' ? e.message : 'Something went wrong. Please try again.' }); }
+  clearInterval(chatTick); chatBusy = false; drawChat();
 }
 $('chSend').onclick = () => sendChat();
 $('chText').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !('ontouchstart' in window)) { e.preventDefault(); sendChat(); } });
