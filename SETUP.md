@@ -67,7 +67,9 @@ Run it from inside the site folder.
 - **Today:** who to follow up with now, and good first contacts.
 - **Leads:** search (spelling is matched loosely), filter, add. Tap a lead for its contacts (call, WhatsApp, email), brochure sending, next step and the full conversation log.
 - **Ask AI (💬):** type or speak what happened ("Called Preethi Global, wants 200 kg turmeric, call Thursday"). The AI finds the company and prepares the note; **nothing is saved until Manu taps Save.** He can also ask questions ("who is due today?") and have WhatsApp messages drafted. The AI can never delete data or send messages.
-- **Voice:** the 🎤 button uses the phone's built-in speech recognition (English, Malayalam, Hindi, Tamil). It needs internet and microphone permission.
+- **Voice input:** the 🎤 button dictates into the box using the phone's built-in speech recognition (English, Malayalam, Hindi, Tamil). It needs internet and microphone permission.
+- **Talk mode (🎧 Talk):** hands-free. It listens, sends when Manu pauses, speaks a short reply, then listens again until he taps **End** (or after 3 silent rounds). When the AI proposes a save, saying "save" / "ശരി" / "yes" confirms it and "skip" / "വേണ്ട" dismisses it; only short exact words count, and the Save/Dismiss buttons stay on screen.
+- **Spoken replies:** the phone's own voice is used if it has one for the language (English, Hindi, Tamil, Malayalam...). If not, the reply is spoken by Google's text-to-speech through the same `GEMINI_API_KEY` (free preview model `gemini-3.1-flash-tts-preview`; override with `GEMINI_TTS_MODEL`, voice with `GEMINI_VOICE`, daily cap with `TTS_DAILY_CAP`, default 300). Use **More → Voice → Test Malayalam voice** to see which one works on Manu's phone. On Samsung the phone voice can be added in Settings → General management → Text-to-speech → Google.
 - **More:** import and CSV backups. Export a backup now and then.
 
 **Privacy:** the leads are public business contacts, but still personal data. Keep the password private, and note that what Manu types into the AI box is sent to the chosen AI provider (Google or Anthropic) to process.

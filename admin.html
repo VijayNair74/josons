@@ -90,6 +90,10 @@ details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--leaf2)
 .link{color:var(--leaf2);overflow-wrap:anywhere}
 .saved{font-size:11.5px;color:var(--leaf2);min-height:1em}
 .back{display:none}
+#talkbar{background:#FFF3D6;border-top:1px solid var(--turmeric);padding:8px max(14px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:10px;font-weight:600}
+#talkbar span{flex:1}
+#talkbar.listen span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--chili);margin-right:8px;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
 </style>
 </head>
 <body>
@@ -145,6 +149,9 @@ details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--leaf2)
         <p class="sub" id="impInfo"></p>
         <div class="row"><button type="button" class="primary" id="impGo" hidden>Import</button><button type="button" class="sm" id="tplBtn">Download blank template</button></div>
       </div>
+      <h2>Voice</h2>
+      <div class="card"><label>Spoken replies<select id="voicePref"><option value="auto">Automatic (phone voice, else Google voice)</option><option value="phone">Phone voice only</option><option value="gemini">Google voice only</option></select></label>
+        <div class="row" style="margin-top:8px"><button type="button" class="sm" id="voiceTest">🔊 Test Malayalam voice</button></div><p class="sub" id="voiceInfo"></p></div>
       <h2>Back up</h2>
       <div class="row"><button type="button" id="expCo">Companies &amp; contacts (CSV)</button><button type="button" id="expIn">Conversation log (CSV)</button></div>
       <h2>Account</h2>
@@ -180,8 +187,10 @@ details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--leaf2)
   <div class="wrap" style="flex:1;display:flex;flex-direction:column;min-height:0;width:100%">
     <div id="chatlog" aria-live="polite"></div>
   </div>
+  <div id="talkbar" hidden><span id="talkSt"></span><button type="button" class="danger sm" id="talkEnd">End</button></div>
   <div class="composer"><div class="in">
-    <button type="button" class="mic" id="chMic" aria-pressed="false" aria-label="Speak">🎤</button>
+    <button type="button" class="mic" id="chMic" aria-pressed="false" aria-label="Dictate">🎤</button>
+    <button type="button" class="gold" id="chTalk" aria-label="Talk hands-free">🎧 Talk</button>
     <textarea id="chText" rows="1" placeholder="Type or speak… e.g. Called Preeti Global, wants 200 kg turmeric, call Thursday"></textarea>
     <button type="button" class="primary" id="chSend">Send</button>
   </div>
@@ -456,15 +465,16 @@ function drawChat() {
   log.innerHTML = chat.map((m, mi) => m.role === 'user' ? bub(m.content, 'u') : bub(m.content, 'a') + (m.props || []).map((p, i) => m.done?.[i] ? `<div class="prop done">✓ ${p.type === 'log' ? 'Conversation saved' : p.type === 'update' ? 'Updated' : 'Added'}: ${esc(p.company || p.fields?.company || '')}</div>` : m.skip?.[i] ? '' : propHtml(p, i, mi)).join('')).join('') + (chatBusy ? `<div class="bub a" id="busyBub">Working on it… ${Math.round((Date.now() - chatT0) / 1000)}s</div>` : '');
   log.scrollTop = log.scrollHeight;
 }
-async function sendChat(text) {
-  text = (text || $('chText').value).trim(); if (!text || chatBusy) return;
+async function sendChat(text, opts = {}) {
+  text = (text || $('chText').value).trim(); if (!text || chatBusy) return null;
   $('chText').value = ''; chat.push({ role: 'user', content: text }); chatBusy = true; chatT0 = Date.now(); drawChat(); chatTick = setInterval(() => { const b = $('busyBub'); if (b) b.textContent = `Working on it… ${Math.round((Date.now() - chatT0) / 1000)}s`; }, 1000);
   try {
     const msgs = chat.map((m) => ({ role: m.role, content: m.content }));
-    const r = await crm('ai', 'POST', { messages: msgs, company_id: S.tab === 'lead' ? S.lead : undefined }, 70000);
+    const r = await crm('ai', 'POST', { messages: msgs, company_id: S.tab === 'lead' ? S.lead : undefined, voice: !!opts.voice }, 70000);
     chat.push({ role: 'assistant', content: r.reply, props: r.proposals || [], done: {}, skip: {}, orig: text });
-  } catch (e) { if (e.message === 'auth') { clearInterval(chatTick); return; } chat.push({ role: 'assistant', content: e.name === 'TimeoutError' ? 'The AI is taking too long. Please try again.' : e.message && e.message !== 'server' ? e.message : 'Something went wrong. Please try again.' }); }
+  } catch (e) { if (e.message === 'auth') { clearInterval(chatTick); return null; } chat.push({ role: 'assistant', content: e.name === 'TimeoutError' ? 'The AI is taking too long. Please try again.' : e.message && e.message !== 'server' ? e.message : 'Something went wrong. Please try again.' }); }
   clearInterval(chatTick); chatBusy = false; drawChat();
+  return chat[chat.length - 1];
 }
 $('chSend').onclick = () => sendChat();
 $('chText').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !('ontouchstart' in window)) { e.preventDefault(); sendChat(); } });
@@ -483,6 +493,77 @@ $('chatlog').addEventListener('click', async (e) => {
   }
 });
 $('fab').onclick = openChat; $('chatClose').onclick = () => closeOverlays();
+/* ---------- spoken replies + hands-free "Talk" mode ---------- */
+const scriptLang = (t) => /[ഀ-ൿ]/.test(t) ? 'ml-IN' : /[஀-௿]/.test(t) ? 'ta-IN' : /[ऀ-ॿ]/.test(t) ? 'hi-IN' : 'en-IN';
+const spoken = (t) => { let s = String(t || '').replace(/https?:\/\/\S+/g, '').replace(/[*_`#>|]/g, '').replace(/\(\s*(JOS|NEW|CUS)-\d+[^)]*\)/g, '').replace(/\s+/g, ' ').trim(); if (s.length > 360) { const c = s.slice(0, 360), i = Math.max(c.lastIndexOf('. '), c.lastIndexOf('? '), c.lastIndexOf('। ')); s = i > 120 ? c.slice(0, i + 1) : c; } return s; };
+let voices = []; const loadVoices = () => { try { voices = speechSynthesis.getVoices(); } catch (e) {} }; loadVoices(); try { speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
+let audioEl = null, talking = false, curRec = null, noServerVoice = false, talkErr = '', hinted = false;
+function phoneSpeak(text, lang) {
+  return new Promise((res) => {
+    try { const v = voices.find((x) => x.lang.replace('_', '-').toLowerCase().startsWith(lang.slice(0, 2).toLowerCase())); if (!v) return res(false);
+      const u = new SpeechSynthesisUtterance(text); u.voice = v; u.lang = v.lang; u.onend = () => res(true); u.onerror = () => res(false); speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) { res(false); }
+  });
+}
+async function serverSpeak(text) {
+  const r = await fetch('/api/admin/crm/speak', { method: 'POST', headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: JSON.stringify({ text }), signal: AbortSignal.timeout(32000) });
+  if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.error || 'voice'); }
+  const url = URL.createObjectURL(await r.blob());
+  return new Promise((res) => { audioEl = new Audio(url); audioEl.onended = () => { URL.revokeObjectURL(url); res(true); }; audioEl.onerror = () => res(false); audioEl.play().catch(() => res(false)); });
+}
+// returns which voice was used: 'phone', 'google' or 'none'
+async function say(text) {
+  const t = spoken(text); if (!t) return 'none'; const lang = scriptLang(t), pref = lsGet('jvoice', 'auto');
+  if (pref !== 'gemini' && await phoneSpeak(t, lang)) return 'phone';
+  if (pref !== 'phone' && !noServerVoice) { try { if (await serverSpeak(t)) return 'google'; } catch (e) { if (/GEMINI_API_KEY/.test(e.message || '')) noServerVoice = true; say.err = e.message; } }
+  return 'none';
+}
+$('voicePref').value = lsGet('jvoice', 'auto'); $('voicePref').onchange = () => lsSet('jvoice', $('voicePref').value);
+$('voiceTest').onclick = async () => {
+  $('voiceInfo').textContent = 'Testing…'; noServerVoice = false; say.err = '';
+  const how = await say('നമസ്കാരം മനു, ഇത് ജോൺസൺസ് സഹായി ആണ്. നിങ്ങൾക്ക് എന്നെ കേൾക്കാമോ?');
+  $('voiceInfo').textContent = how === 'phone' ? 'Spoken with your phone\'s Malayalam voice. Did you hear it clearly?' : how === 'google' ? 'Spoken with Google\'s voice. Did you hear Malayalam?' : 'No Malayalam voice worked. ' + (say.err ? '(' + say.err + ') ' : '') + 'On Samsung: Settings → General management → Text-to-speech → Google → install the Malayalam voice. Or use the AI key setup in SETUP.md for Google voice.';
+};
+const YES = ['save', 'save it', 'yes', 'yeah', 'ok', 'okay', 'confirm', 'sure', 'correct', 'ശരി', 'സേവ്', 'സേവ് ചെയ്യൂ', 'അതെ', 'ഉവ്വ്', 'ഓക്കേ', 'ഹാ', 'हाँ', 'हां', 'ठीक', 'सेव', 'ஆம்', 'சரி', 'சேவ்'];
+const NO = ['skip', 'no', 'cancel', 'dismiss', 'not now', 'വേണ്ട', 'ഇല്ല', 'സ്കിപ്', 'नहीं', 'छोड़ो', 'स्किप', 'வேண்டாம்', 'இல்லை'];
+const SAYS = { saved: { en: 'Saved.', ml: 'സേവ് ചെയ്തു.', hi: 'सेव हो गया।', ta: 'சேமிக்கப்பட்டது.' }, skipped: { en: 'Skipped.', ml: 'ഒഴിവാക്കി.', hi: 'छोड़ दिया।', ta: 'தவிர்த்தேன்.' }, failed: { en: 'Sorry, that did not save.', ml: 'ക്ഷമിക്കണം, സേവ് ആയില്ല.', hi: 'माफ़ कीजिए, सेव नहीं हुआ।', ta: 'மன்னிக்கவும், சேமிக்க முடியவில்லை.' } };
+const pendingProp = () => { const m = [...chat].reverse().find((x) => x.role === 'assistant'); if (!m || !m.props) return null; const i = m.props.findIndex((p, k) => p.type !== 'whatsapp' && !m.done?.[k] && !m.skip?.[k]); return i >= 0 ? [m, i] : null; };
+async function voiceDecision(text) {
+  const t = String(text || '').toLowerCase().replace(/[.,!?।]/g, ' ').replace(/\s+/g, ' ').trim(); if (!t || t.split(' ').length > 3) return null;
+  const p = pendingProp(); if (!p) return null; const yes = YES.includes(t), no = NO.includes(t); if (!yes && !no) return null;
+  const [m, i] = p; if (no) { m.skip[i] = true; drawChat(); return 'skipped'; }
+  const r = await crm('apply', 'POST', { proposals: [m.props[i]], original_text: m.orig });
+  if (r.results[0]?.ok) { m.done[i] = true; await load(); drawChat(); return 'saved'; } return 'failed';
+}
+function listenOnce(lang) {
+  return new Promise((res) => {
+    const rec = new SR(); curRec = rec; rec.lang = lang; rec.interimResults = true; rec.continuous = false; let got = '', done = false, tm = null;
+    const fin = (t) => { if (done) return; done = true; clearTimeout(tm); curRec = null; try { rec.stop(); } catch (e) {} res(t); };
+    tm = setTimeout(() => fin(got), 9000);
+    rec.onspeechstart = () => { clearTimeout(tm); tm = setTimeout(() => fin(got), 30000); };
+    rec.onresult = (e) => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; got = t.trim(); $('chText').value = got; };
+    rec.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') talkErr = 'mic'; fin(got); };
+    rec.onend = () => fin(got);
+    try { rec.start(); } catch (e) { fin(''); }
+  });
+}
+const setSt = (t, listening) => { $('talkSt').textContent = t; $('talkbar').classList.toggle('listen', !!listening); };
+async function talkLoop() {
+  let empties = 0;
+  while (talking) {
+    setSt('Listening… speak now', true); const lang = $('chLang').value, heard = await listenOnce(lang); if (!talking) break;
+    if (!heard) { if (talkErr) { toast('Allow microphone access to talk.'); break; } if (++empties >= 3) { toast('Talk mode stopped: nothing heard.'); break; } continue; }
+    empties = 0; $('chText').value = '';
+    let dec = null; try { dec = await voiceDecision(heard); } catch (e) { dec = 'failed'; }
+    if (dec) { setSt('Speaking…'); await say((SAYS[dec][lang.slice(0, 2)] || SAYS[dec].en)); continue; }
+    setSt('Thinking…'); const m = await sendChat(heard, { voice: true }); if (!talking) break;
+    if (m && m.role === 'assistant') { setSt('Speaking…'); const how = await say(m.content); if (how === 'none' && !hinted) { hinted = true; toast('Could not speak that. The reply is on screen. See More → Voice.'); } }
+  }
+  stopTalk();
+}
+function startTalk() { if (!SR || talking) return; talking = true; talkErr = ''; $('talkbar').hidden = false; if (!chat.length) drawChat(); talkLoop(); }
+function stopTalk() { talking = false; try { curRec && curRec.abort(); } catch (e) {} try { speechSynthesis.cancel(); } catch (e) {} try { audioEl && audioEl.pause(); } catch (e) {} $('talkbar').hidden = true; }
+if (!SR) $('chTalk').hidden = true;
+$('chTalk').onclick = startTalk; $('talkEnd').onclick = stopTalk;
 /* ---------- navigation ---------- */
 const VIEWS = ['today', 'leads', 'lead', 'enq', 'more'];
 function show(v) {
@@ -515,8 +596,8 @@ document.addEventListener('click', (e) => {
 $('moreBtn').onclick = () => { S.shown += 60; drawLeads(); };
 /* overlays (sheets): the phone's Back button closes them */
 function overlay(id) { $(id).hidden = false; history.pushState({ o: id }, ''); document.body.style.overflow = 'hidden'; }
-function closeOverlays(fromHash) { let any = false; ['logSheet', 'chat'].forEach((id) => { if (!$(id).hidden) { $(id).hidden = true; any = true; } }); document.body.style.overflow = ''; if (any && !fromHash && history.state?.o) history.back(); }
-window.addEventListener('popstate', () => { if (!history.state?.o) { ['logSheet', 'chat'].forEach((id) => $(id).hidden = true); document.body.style.overflow = ''; } });
+function closeOverlays(fromHash) { stopTalk(); let any = false; ['logSheet', 'chat'].forEach((id) => { if (!$(id).hidden) { $(id).hidden = true; any = true; } }); document.body.style.overflow = ''; if (any && !fromHash && history.state?.o) history.back(); }
+window.addEventListener('popstate', () => { if (!history.state?.o) { stopTalk(); ['logSheet', 'chat'].forEach((id) => $(id).hidden = true); document.body.style.overflow = ''; } });
 /* ---------- login ---------- */
 $('login').addEventListener('submit', (e) => { e.preventDefault(); key = $('pw').value; remember = $('remember').checked; try { (remember ? localStorage : sessionStorage).setItem('jk', key); } catch (x) {} $('lmsg').textContent = ''; load(true); });
 if (key) load(true);
