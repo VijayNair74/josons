@@ -56,10 +56,12 @@ Run it from inside the site folder.
 **First-time steps**
 1. Sign in at `/admin.html` on his phone and choose **Add to Home screen** in the browser menu.
 2. **More → Import leads**: choose `josons_leads_import.csv` (the 200 prospects). Do the same for a list of past customers, with `Y` in the `is_customer` column. Companies already in the list are skipped, so re-running is safe.
-3. **Turn on the AI assistant** (optional but recommended): in the Pages project, go to **Settings → Variables and secrets → Add**:
-   - **Type:** Secret, **Name:** `ANTHROPIC_API_KEY`, **Value:** the API key (create it at console.anthropic.com, and set a monthly spend limit there)
-   - Optional plain variables: `CRM_MODEL` (default `claude-haiku-5-5`) and `AI_DAILY_CAP` (default `150` AI messages a day)
-   - Then **redeploy** so the secret takes effect.
+3. **Turn on the AI assistant** (optional but recommended). Choose one:
+   - **Free: Google Gemini.** Create a key at https://aistudio.google.com (no card). In the Pages project go to **Settings → Variables and secrets → Add**: **Type** Secret, **Name** `GEMINI_API_KEY`, **Value** the key. Then **redeploy**. The default model is `gemini-flash-lite-latest` (about 500 free requests a day, enough for this); change it with a plain variable `GEMINI_MODEL` if needed. **Note:** on Google's free tier, what Manu types may be used by Google to improve its products and may be read by reviewers. Don't put anything confidential in the notes, or use a paid key.
+   - **Paid: Claude.** Secret `ANTHROPIC_API_KEY` (create it at console.anthropic.com and set a monthly spend limit). Default model `claude-haiku-5-5`; override with `CRM_MODEL`.
+   - If both keys exist, Claude is used. To force one, add a variable `AI_PROVIDER` set to `gemini` or `claude`.
+   - Optional for both: `AI_DAILY_CAP` (default `150` AI messages a day).
+   - **More → Account** shows which AI is active.
 
 **How it works**
 - **Today:** who to follow up with now, and good first contacts.
@@ -68,4 +70,4 @@ Run it from inside the site folder.
 - **Voice:** the 🎤 button uses the phone's built-in speech recognition (English, Malayalam, Hindi, Tamil). It needs internet and microphone permission.
 - **More:** import and CSV backups. Export a backup now and then.
 
-**Privacy:** the leads are public business contacts, but still personal data. Keep the password private, and note that what Manu types into the AI box is sent to Anthropic to process.
+**Privacy:** the leads are public business contacts, but still personal data. Keep the password private, and note that what Manu types into the AI box is sent to the chosen AI provider (Google or Anthropic) to process.

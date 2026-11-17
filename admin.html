@@ -216,7 +216,7 @@ async function load(first) {
     const d = await crm('all');
     S.cos = d.companies; S.today = d.today; S.ai = d.ai;
     $('login').hidden = true; $('app').hidden = false; $('tabs').hidden = false; $('fab').hidden = false; $('gmsg').textContent = '';
-    $('aiState').textContent = d.ai ? 'AI assistant: on.' : 'AI assistant: not switched on yet (the ANTHROPIC_API_KEY secret is missing).';
+    $('aiState').textContent = d.ai ? `AI assistant: on (${d.ai === 'gemini' ? 'Gemini' : 'Claude'}).` : 'AI assistant: not switched on yet (add the GEMINI_API_KEY or ANTHROPIC_API_KEY secret).';
     buildFilters(); route();
   } catch (e) { if (e.message !== 'auth') { $('lmsg').textContent = $('gmsg').textContent = 'Could not reach the server. Check your connection and try again.'; if (first && key) $('login').hidden = false; } }
 }
