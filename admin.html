@@ -4,164 +4,522 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Josons Enquiries</title>
+<meta name="theme-color" content="#0F3D2E">
+<title>Josons CRM</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Poppins:wght@400;500;600&display=swap">
 <style>
-:root{--leaf:#0F3D2E;--leaf2:#185A43;--gold:#C9A227;--turmeric:#E8A317;--chili:#B3261E;--cream:#FBF4E4;--card:#fff;--ink:#2A1A10;--muted:#6E5B4B;--line:#E7D9BC;--chip:#F2E7CF;color-scheme:light}
-*{box-sizing:border-box}
+:root{--leaf:#0F3D2E;--leaf2:#185A43;--gold:#C9A227;--turmeric:#E8A317;--chili:#B3261E;--cream:#FBF4E4;--card:#fff;--ink:#2A1A10;--muted:#6E5B4B;--line:#E7D9BC;--chip:#F2E7CF;--wa:#1F8F4E;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-body{margin:0;background:var(--cream);color:var(--ink);font:14px/1.5 Poppins,system-ui,sans-serif}
-.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header{background:var(--leaf);color:var(--cream);border-bottom:3px solid var(--gold)}
-header .wrap{display:flex;align-items:center;gap:12px;padding-block:12px;flex-wrap:wrap}
-header img{width:40px;height:40px}
-h1{font:600 20px Lora,Georgia,serif;margin:0;flex:1}
-button,.btn{font:inherit;font-weight:600;font-size:13px;border-radius:999px;padding:9px 16px;min-height:40px;cursor:pointer;border:1.5px solid var(--leaf2);background:#fff;color:var(--leaf2);text-decoration:none;display:inline-flex;align-items:center}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.5 Poppins,system-ui,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+header{background:var(--leaf);color:var(--cream);border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top,0px)}
+header .wrap{display:flex;align-items:center;gap:10px;padding-block:9px}
+header img{width:34px;height:34px}
+h1{font:600 18px Lora,Georgia,serif;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+h2{font:600 15px Lora,Georgia,serif;margin:22px 0 8px;color:var(--leaf)}
+button,.btn{font:inherit;font-weight:600;font-size:14px;border-radius:999px;padding:9px 16px;min-height:44px;cursor:pointer;border:1.5px solid var(--leaf2);background:#fff;color:var(--leaf2);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1.2}
 button.primary{background:var(--leaf2);color:#fff}
+button.sm,.btn.sm{min-height:36px;padding:5px 12px;font-size:13px}
 button.danger{border-color:var(--chili);color:var(--chili)}
 button.danger.armed{background:var(--chili);color:#fff}
-header button{background:transparent;color:var(--cream);border-color:rgba(251,244,228,.5)}
+header button{background:transparent;color:var(--cream);border-color:rgba(251,244,228,.5);min-height:38px;padding:5px 12px}
+.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.gold{background:var(--turmeric);border-color:var(--turmeric);color:#2A1A10}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-#login{max-width:360px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px}
-input,select,textarea{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px;background:#fff;color:var(--ink);width:100%}
+input,select,textarea{font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;min-height:44px;background:#fff;color:var(--ink);width:100%}
+textarea{resize:vertical}
 label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted)}
-.msg{min-height:1.3em;color:var(--chili);font-size:13px;margin:0}
-.bar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:end;padding-block:16px}
-.bar label{flex:1 1 180px}
-.counts{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:8px}
-.counts span{background:var(--chip);border-radius:999px;padding:3px 10px;font-size:12px}
-.counts b{font-weight:600}
-.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;padding-bottom:40px}
-.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+label.chk{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--ink);font-weight:500}
+label.chk input{width:22px;height:22px;min-height:0}
+.msg{min-height:1.3em;color:var(--chili);font-size:13px;margin:6px 0}
+#login{max-width:380px;margin:50px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;min-width:0}
+.card.click{cursor:pointer}
+.card.click:active{background:#FFF9EA}
 .card.due{border-color:var(--turmeric);box-shadow:inset 4px 0 0 var(--turmeric)}
-.top{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
-.top b{color:var(--ink);font-variant-numeric:tabular-nums}
-.who{font:600 17px Lora,Georgia,serif;color:var(--leaf);overflow-wrap:anywhere}
-.sub{font-size:12.5px;color:var(--muted)}
-ul{margin:0;padding-left:18px}
-.pill{display:inline-block;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
-.s-New{background:#FDE7C4;color:#7A4B00}.s-Quoted{background:#DCEBFF;color:#0B3D91}.s-Sample-sent{background:#EBDDF7;color:#4B2177}.s-Ordered{background:#D6F0E0;color:#0F5132}.s-Lost{background:#EEE;color:#555}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
-.wa{background:#1F8F4E;border-color:#1F8F4E;color:#fff}
-.empty{padding:40px 0;color:var(--muted);text-align:center}
+.who{font:600 16px Lora,Georgia,serif;color:var(--leaf);overflow-wrap:anywhere}
+.sub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.pill{display:inline-block;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--chip);color:var(--ink);white-space:nowrap}
+.pA{background:#FDE7C4;color:#7A4B00}.pB{background:#EEE;color:#444}
+.st-New{background:#FDE7C4;color:#7A4B00}.st-Contacted{background:#DCEBFF;color:#0B3D91}.st-Replied{background:#D8EEF7;color:#0A4F6B}.st-Sample-sent{background:#EBDDF7;color:#4B2177}.st-Quoted{background:#E6E2FF;color:#2F2A8C}.st-Customer{background:#D6F0E0;color:#0F5132}.st-Lost{background:#EEE;color:#666}.st-Do-not-contact{background:#F8D7D3;color:#8A1C14}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 4px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+.stat b{display:block;font:600 22px Lora,serif;color:var(--leaf)}
+.stat span{font-size:11px;color:var(--muted)}
+.stat.hot b{color:var(--chili)}
+.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+.filters .full{grid-column:1/-1}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:30;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs button{border:0;border-radius:0;background:transparent;flex-direction:column;gap:0;font-size:11.5px;min-height:56px;color:var(--muted);font-weight:500}
+nav.tabs button span{font-size:20px;line-height:1.1}
+nav.tabs button[aria-current=true]{color:var(--leaf2);font-weight:600;box-shadow:inset 0 3px 0 var(--gold)}
+#fab{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:31;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:12px 20px}
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(20,12,6,.5);display:flex;align-items:flex-end;justify-content:center}
+.sheet>.panel{background:var(--cream);width:100%;max-width:760px;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px max(14px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px))}
+.panel h3{font:600 18px Lora,serif;margin:0 0 10px;color:var(--leaf)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-height:40px;padding:6px 14px;font-weight:500}
+.chips button[aria-pressed=true]{background:var(--leaf2);color:#fff;border-color:var(--leaf2)}
+.tl{border-left:3px solid var(--line);margin-left:6px;padding-left:12px}
+.tl .it{position:relative;margin-bottom:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.tl .it::before{content:"";position:absolute;left:-19px;top:14px;width:11px;height:11px;border-radius:50%;background:var(--gold)}
+.tl .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tl .txt{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:2px}
+#chat{position:fixed;inset:0;z-index:60;background:var(--cream);display:flex;flex-direction:column}
+#chat header .wrap{padding-block:8px}
+#chatlog{flex:1;overflow:auto;padding:12px 0}
+.bub{max-width:88%;padding:9px 13px;border-radius:16px;margin:0 0 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.bub.u{background:var(--leaf2);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.bub.a{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.prop{background:#FFF9EA;border:1.5px solid var(--turmeric);border-radius:12px;padding:10px 12px;margin:0 0 10px;max-width:96%}
+.prop.done{border-color:var(--wa);background:#EEF8F1}
+.prop .k{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.composer{background:#fff;border-top:1px solid var(--line);padding:8px max(10px,env(safe-area-inset-left,0px)) calc(8px + env(safe-area-inset-bottom,0px))}
+.composer .in{display:flex;gap:8px;align-items:flex-end;max-width:760px;margin:0 auto}
+.composer textarea{min-height:44px;max-height:140px;flex:1}
+.composer button{flex:none}
+button.mic[aria-pressed=true]{background:var(--chili);color:#fff;border-color:var(--chili)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(70px + env(safe-area-inset-top,0px));background:#222;color:#fff;padding:9px 16px;border-radius:999px;font-size:13px;z-index:90;max-width:90%}
+.empty{padding:26px 0;color:var(--muted);text-align:center}
+details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--leaf2);padding:6px 0}
+.link{color:var(--leaf2);overflow-wrap:anywhere}
 .saved{font-size:11.5px;color:var(--leaf2);min-height:1em}
+.back{display:none}
 </style>
 </head>
 <body>
-<header><div class="wrap"><img src="img/logo.png" alt=""><h1>Josons · Enquiries</h1><button type="button" id="out" hidden>Log out</button></div></header>
+<header id="hdr"><div class="wrap"><button type="button" class="back" id="back" aria-label="Back">←</button><img src="img/logo.png" alt=""><h1 id="title">Josons CRM</h1></div></header>
 
 <main class="wrap">
   <form id="login">
-    <h2 style="font:600 22px Lora,serif;margin:0;color:var(--leaf)">Manu's enquiry desk</h2>
+    <h2 style="font:600 22px Lora,serif;margin:0;color:var(--leaf)">Josons CRM</h2>
     <label for="pw">Password<input id="pw" type="password" autocomplete="current-password"></label>
+    <label class="chk"><input type="checkbox" id="remember" checked> Keep me signed in on this phone</label>
     <button class="primary" type="submit">Open</button>
     <p class="msg" id="lmsg" role="status"></p>
   </form>
 
-  <section id="app" hidden>
-    <div class="bar">
-      <label for="fs">Status<select id="fs"><option value="">All</option><option>New</option><option>Quoted</option><option>Sample sent</option><option>Ordered</option><option>Lost</option><option value="due">Follow-up due</option></select></label>
-      <label for="fq">Search<input id="fq" type="search" placeholder="name, product, state…"></label>
-      <button type="button" id="refresh">Refresh</button>
-      <button type="button" id="csv">Export CSV</button>
-      <button type="button" class="danger" id="clearOld">Clear closed &gt; 30 days</button>
-      <button type="button" class="danger" id="clearAll">Delete all</button>
-    </div>
-    <p class="msg" id="amsg" role="status"></p>
-    <div class="counts" id="counts"></div>
-    <div class="list" id="list"></div>
-  </section>
+  <div id="app" hidden>
+    <p class="msg" id="gmsg" role="status"></p>
+
+    <section id="v-today">
+      <div class="stats" id="stats"></div>
+      <div id="todayList"></div>
+    </section>
+
+    <section id="v-leads" hidden>
+      <div class="filters">
+        <label class="full">Search<input id="fq" type="search" placeholder="name, city, product, phone…" autocomplete="off"></label>
+        <label>Status<select id="fs"></select></label>
+        <label>Priority<select id="fp"><option value="">All</option><option>A</option><option>B</option></select></label>
+        <label>State<select id="fst"></select></label>
+        <label class="chk full"><input type="checkbox" id="fc"> Past customers only</label>
+      </div>
+      <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="sub" id="lcount"></span><button type="button" class="sm" id="addLead">+ Add lead</button></div>
+      <div id="leadList"></div>
+      <button type="button" id="moreBtn" class="sm" hidden style="margin:0 auto 20px">Show more</button>
+    </section>
+
+    <section id="v-lead" hidden></section>
+
+    <section id="v-enq" hidden>
+      <div class="filters">
+        <label>Status<select id="es"><option value="">All</option><option>New</option><option>Quoted</option><option>Sample sent</option><option>Ordered</option><option>Lost</option></select></label>
+        <label class="full">Search<input id="eq" type="search" placeholder="name, product, state…"></label>
+      </div>
+      <p class="sub">Requests that buyers send from the website's enquiry cart.</p>
+      <div id="enqList"></div>
+      <div class="row" style="margin:10px 0 30px"><button type="button" class="danger sm" id="clearOld">Clear closed &gt; 30 days</button><button type="button" class="danger sm" id="clearAll">Delete all enquiries</button></div>
+    </section>
+
+    <section id="v-more" hidden>
+      <h2>Import leads or customers</h2>
+      <p class="sub">Choose a CSV file. Columns: lead_id, company, city, state, segment, priority, product_fit, contact_name, email, phone, phone2, website, source, notes, next_step, status, is_customer, language. Only <b>company</b> is required. For past customers, put <b>Y</b> in is_customer. Companies already in the list are skipped.</p>
+      <div class="card">
+        <input type="file" id="csvFile" accept=".csv,text/csv">
+        <p class="sub" id="impInfo"></p>
+        <div class="row"><button type="button" class="primary" id="impGo" hidden>Import</button><button type="button" class="sm" id="tplBtn">Download blank template</button></div>
+      </div>
+      <h2>Back up</h2>
+      <div class="row"><button type="button" id="expCo">Companies &amp; contacts (CSV)</button><button type="button" id="expIn">Conversation log (CSV)</button></div>
+      <h2>Account</h2>
+      <div class="row"><button type="button" id="refresh">Refresh data</button><button type="button" class="danger" id="out">Log out</button></div>
+      <p class="sub" id="aiState" style="margin-top:14px"></p>
+    </section>
+  </div>
 </main>
+
+<button type="button" class="primary gold" id="fab" hidden>💬 Ask AI</button>
+<nav class="tabs" id="tabs" hidden>
+  <button type="button" data-tab="today"><span>🏠</span>Today</button>
+  <button type="button" data-tab="leads"><span>👥</span>Leads</button>
+  <button type="button" data-tab="enq"><span>📥</span>Enquiries</button>
+  <button type="button" data-tab="more"><span>⚙️</span>More</button>
+</nav>
+
+<div class="sheet" id="logSheet" hidden><div class="panel" role="dialog" aria-label="Log a conversation">
+  <h3 id="logTitle">Log conversation</h3>
+  <p class="sub" style="margin:-6px 0 10px">What did you talk about?</p>
+  <div class="chips" id="chChan"></div>
+  <div class="chips" id="chDir" style="margin-top:8px"></div>
+  <label style="margin-top:10px">Notes <textarea id="lgText" rows="4" placeholder="e.g. Wants 200 kg turmeric, asked for sample, price by Friday"></textarea></label>
+  <div class="row" style="margin:6px 0"><button type="button" class="mic sm" id="lgMic" aria-pressed="false">🎤 Speak</button><select id="lgLang" class="micLang" style="width:auto;min-height:36px"></select></div>
+  <div class="grid2"><label>Next step<input id="lgNext" placeholder="e.g. Call back"></label><label>On<input type="date" id="lgDate"></label></div>
+  <label style="margin-top:10px">Status after this<select id="lgStatus"></select></label>
+  <p class="msg" id="lgMsg" role="status"></p>
+  <div class="row"><button type="button" class="primary" id="lgSave" style="flex:1">Save</button><button type="button" id="lgCancel">Cancel</button></div>
+</div></div>
+
+<div id="chat" hidden>
+  <header><div class="wrap"><img src="img/logo.png" alt=""><h1>Ask Josons AI</h1><button type="button" id="chatClose">Close</button></div></header>
+  <div class="wrap" style="flex:1;display:flex;flex-direction:column;min-height:0;width:100%">
+    <div id="chatlog" aria-live="polite"></div>
+  </div>
+  <div class="composer"><div class="in">
+    <button type="button" class="mic" id="chMic" aria-pressed="false" aria-label="Speak">🎤</button>
+    <textarea id="chText" rows="1" placeholder="Type or speak… e.g. Called Preeti Global, wants 200 kg turmeric, call Thursday"></textarea>
+    <button type="button" class="primary" id="chSend">Send</button>
+  </div>
+  <div class="in" style="margin-top:6px"><span class="sub" style="flex:1" id="chCtx"></span><select class="micLang" id="chLang" aria-label="Speaking language" style="width:auto;min-height:36px"></select></div></div>
+</div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const ST = ['New', 'Quoted', 'Sample sent', 'Ordered', 'Lost'];
-let key = '', rows = [];
-try { key = sessionStorage.getItem('jk') || ''; } catch (e) {}
-const today = () => new Date().toISOString().slice(0, 10);
+const ST = ['New', 'Contacted', 'Replied', 'Sample sent', 'Quoted', 'Customer', 'Lost', 'Do not contact'];
+const CH = { call: '📞 Call', whatsapp: '💬 WhatsApp', email: '✉️ Email', meeting: '🤝 Meeting', note: '📝 Note', other: 'Other' };
+const LANGS = ['', 'English', 'Malayalam', 'Hindi', 'Tamil', 'Telugu', 'Kannada', 'Marathi', 'Gujarati', 'Bengali', 'Punjabi', 'Odia', 'Assamese', 'Konkani'];
+const stCls = (s) => 'st-' + String(s).replace(/ /g, '-');
+let key = '', S = { cos: [], today: '', ai: false, tab: 'today', shown: 60, lead: null }, remember = true;
+try { key = localStorage.getItem('jk') || sessionStorage.getItem('jk') || ''; } catch (e) {}
+const lsGet = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 
-async function api(method, body) {
-  const r = await fetch('/api/admin/enquiries', { method, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+function toast(t) { const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
+async function api(path, method = 'GET', body) {
+  const r = await fetch('/api/admin/' + path, { method, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
   if (r.status === 401) { logout('Wrong password.'); throw new Error('auth'); }
-  if (!r.ok) throw new Error('server');
-  return r.json();
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(d.error || 'server'); e.data = d; throw e; }
+  return d;
 }
-function logout(msg) { key = ''; try { sessionStorage.removeItem('jk'); } catch (e) {} $('app').hidden = true; $('out').hidden = true; $('login').hidden = false; $('lmsg').textContent = msg || ''; }
-async function load() {
-  try { const d = await api('GET'); rows = d.enquiries; $('login').hidden = true; $('app').hidden = false; $('out').hidden = false; $('amsg').textContent = ''; draw(); }
-  catch (e) { if (e.message !== 'auth') $('lmsg').textContent = $('amsg').textContent = 'Could not reach the enquiry store. Check your connection and try again.'; }
+const crm = (p, m, b) => api('crm/' + p, m, b);
+function logout(msg) { key = ''; try { localStorage.removeItem('jk'); sessionStorage.removeItem('jk'); } catch (e) {} $('app').hidden = true; $('tabs').hidden = true; $('fab').hidden = true; $('login').hidden = false; $('lmsg').textContent = msg || ''; closeOverlays(); }
+async function load(first) {
+  try {
+    const d = await crm('all');
+    S.cos = d.companies; S.today = d.today; S.ai = d.ai;
+    $('login').hidden = true; $('app').hidden = false; $('tabs').hidden = false; $('fab').hidden = false; $('gmsg').textContent = '';
+    $('aiState').textContent = d.ai ? 'AI assistant: on.' : 'AI assistant: not switched on yet (the ANTHROPIC_API_KEY secret is missing).';
+    buildFilters(); route();
+  } catch (e) { if (e.message !== 'auth') { $('lmsg').textContent = $('gmsg').textContent = 'Could not reach the server. Check your connection and try again.'; if (first && key) $('login').hidden = false; } }
 }
-const place = (r) => [r.loc_city, r.loc_region].filter(Boolean).join(', ') + (r.loc_country && r.loc_country !== 'IN' ? ` (${r.loc_country})` : '');
-function draw() {
-  const f = $('fs').value, q = $('fq').value.trim().toLowerCase(), t = today();
-  const counts = Object.fromEntries(ST.map((s) => [s, 0])); rows.forEach((r) => counts[r.status] = (counts[r.status] || 0) + 1);
-  const due = rows.filter((r) => r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status)).length;
-  $('counts').innerHTML = `<span><b>${rows.length}</b> total</span>` + ST.map((s) => `<span>${s}: <b>${counts[s]}</b></span>`).join('') + (due ? `<span style="background:#FDE7C4">Follow-up due: <b>${due}</b></span>` : '');
-  const vis = rows.filter((r) => {
-    if (f === 'due') { if (!(r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status))) return false; }
-    else if (f && r.status !== f) return false;
-    if (!q) return true;
-    return [r.id, r.name, r.business, r.state, r.btype, r.loc_city, r.loc_region, r.notes, r.admin_note, ...r.items.map((i) => i.product)].join(' ').toLowerCase().includes(q);
+const co = (id) => S.cos.find((c) => c.id === Number(id));
+const dShort = (d) => d ? new Date(d.length > 10 ? d : d + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: d.slice(0, 4) !== S.today.slice(0, 4) ? 'numeric' : undefined }) : '';
+const isOpen = (c) => !['Lost', 'Do not contact'].includes(c.status);
+const dueC = (c) => isOpen(c) && c.next_date && c.next_date <= S.today;
+const pc = (c) => c.contacts[0] || {};
+const waLink = (phone, text) => { const d = String(phone || '').replace(/\D/g, '').replace(/^0+/, ''); const n = d.length === 10 ? '91' + d : d; return n.length >= 11 ? `https://wa.me/${n}${text ? '?text=' + encodeURIComponent(text) : ''}` : ''; };
+
+/* ---------- cards ---------- */
+function card(c) {
+  const p = pc(c), due = dueC(c);
+  return `<article class="card click${due ? ' due' : ''}" data-open="${c.id}">
+    <div class="row" style="justify-content:space-between;gap:6px"><span class="sub"><b>${esc(c.lead_id)}</b></span><span class="row" style="gap:5px">${c.priority ? `<span class="pill p${esc(c.priority)}">${esc(c.priority)}</span>` : ''}<span class="pill ${stCls(c.status)}">${esc(c.status)}</span>${c.is_customer ? '<span class="pill st-Customer">★ Customer</span>' : ''}</span></div>
+    <div class="who">${esc(c.company)}</div>
+    <div class="sub">${[c.city, c.state].filter(Boolean).map(esc).join(', ')}${c.segment ? ' · ' + esc(c.segment) : ''}</div>
+    ${p.name || p.phone ? `<div class="sub">${[p.name, p.phone].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
+    ${c.next_date || c.next_step ? `<div class="sub" style="color:${due ? 'var(--chili)' : 'var(--ink)'}"><b>${c.next_date ? dShort(c.next_date) : ''}</b> ${esc(c.next_step || '')}</div>` : ''}
+    ${c.last_at ? `<div class="sub">Last contact ${dShort(c.last_at)} · ${c.n_int} note${c.n_int === 1 ? '' : 's'}</div>` : '<div class="sub">Not contacted yet</div>'}
+  </article>`;
+}
+/* ---------- today ---------- */
+function drawToday() {
+  const t = S.today, wk = new Date(Date.parse(t) + 7 * 864e5).toISOString().slice(0, 10);
+  const due = S.cos.filter(dueC).sort((a, b) => a.next_date.localeCompare(b.next_date));
+  const soon = S.cos.filter((c) => isOpen(c) && c.next_date > t && c.next_date <= wk).sort((a, b) => a.next_date.localeCompare(b.next_date));
+  const fresh = S.cos.filter((c) => c.status === 'New' && !c.n_int && c.priority === 'A' && (pc(c).phone || pc(c).email)).slice(0, 8);
+  $('stats').innerHTML = `<div class="stat${due.length ? ' hot' : ''}"><b>${due.length}</b><span>Follow up</span></div><div class="stat"><b>${S.cos.filter((c) => !c.n_int).length}</b><span>Not contacted</span></div><div class="stat"><b>${S.cos.filter((c) => c.is_customer).length}</b><span>Customers</span></div><div class="stat"><b>${S.cos.length}</b><span>Total</span></div>`;
+  $('todayList').innerHTML = (due.length ? `<h2>Follow up now</h2>${due.map(card).join('')}` : '<h2>Follow up now</h2><p class="empty">Nothing due. 🎉</p>')
+    + (soon.length ? `<h2>Next 7 days</h2>${soon.map(card).join('')}` : '')
+    + (fresh.length ? `<h2>Good first contacts (priority A)</h2>${fresh.map(card).join('')}` : '');
+}
+/* ---------- leads ---------- */
+function buildFilters() {
+  const keep = { s: $('fs').value, st: $('fst').value };
+  $('fs').innerHTML = '<option value="">All</option><option value="due">Follow-up due</option><option value="never">Not contacted</option>' + ST.map((s) => `<option>${s}</option>`).join('');
+  $('fst').innerHTML = '<option value="">All</option>' + [...new Set(S.cos.map((c) => c.state).filter(Boolean))].sort().map((s) => `<option>${esc(s)}</option>`).join('');
+  $('fs').value = keep.s; $('fst').value = keep.st;
+}
+const norm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/ee/g, 'i').replace(/oo/g, 'u').replace(/th/g, 't').replace(/h/g, '').replace(/(.)\1+/g, '$1').replace(/\s+/g, ' ').trim();
+function drawLeads() {
+  const q = norm($('fq').value).split(' ').filter(Boolean), fs = $('fs').value, fp = $('fp').value, fst = $('fst').value, fc = $('fc').checked;
+  let r = S.cos.filter((c) => {
+    if (fs === 'due' ? !dueC(c) : fs === 'never' ? c.n_int > 0 : fs && c.status !== fs) return false;
+    if (fp && c.priority !== fp) return false; if (fst && c.state !== fst) return false; if (fc && !c.is_customer) return false;
+    if (!q.length) return true;
+    const hay = norm([c.lead_id, c.company, c.city, c.state, c.segment, c.product_fit, ...c.contacts.flatMap((x) => [x.name, x.phone, x.email])].join(' '));
+    return q.every((t) => hay.includes(t));
   });
-  $('list').innerHTML = vis.length ? vis.map((r) => {
-    const isDue = r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status);
-    const ph = (r.phone || '').replace(/\D/g, ''); const wa = ph ? (ph.length === 10 ? '91' + ph : ph) : '';
-    const reply = encodeURIComponent(`Hello ${r.name || ''}, thank you for your enquiry ${r.id} to Josons Spices.`);
-    return `<article class="card${isDue ? ' due' : ''}" data-id="${esc(r.id)}">
-      <div class="top"><b>${esc(r.id)}</b><span>${new Date(r.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span></div>
-      <div><span class="pill s-${esc(r.status).replace(' ', '-')}">${esc(r.status)}</span></div>
-      <div class="who">${esc(r.name || 'No name')}${r.business ? ` · ${esc(r.business)}` : ''}</div>
-      <div class="sub">${[r.btype, r.state, r.phone].filter(Boolean).map(esc).join(' · ')}</div>
-      ${place(r) ? `<div class="sub" title="Approximate, from the visitor's internet connection">📍 ${esc(place(r))}</div>` : ''}
-      <ul>${r.items.map((i) => `<li>${esc(i.product)}${i.qty ? ` — ${esc(i.qty)} ${esc(i.unit)}` : ''}</li>`).join('')}</ul>
-      ${r.sample ? '<div class="sub"><b>Sample requested</b></div>' : ''}${r.notes ? `<div class="sub">“${esc(r.notes)}”</div>` : ''}
-      <div class="row">
-        <label>Status<select data-f="status">${ST.map((s) => `<option${s === r.status ? ' selected' : ''}>${s}</option>`).join('')}</select></label>
-        <label>Follow up on<input type="date" data-f="follow_up" value="${esc(r.follow_up || '')}"></label>
-      </div>
-      <label>Your note<textarea data-f="admin_note" rows="2" maxlength="500">${esc(r.admin_note || '')}</textarea></label>
-      <div class="saved"></div>
-      <div class="acts">${wa ? `<a class="btn wa" href="https://wa.me/${wa}?text=${reply}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="sub">No phone given</span>'}
-        <button type="button" class="danger" data-del>Delete</button></div>
-    </article>`; }).join('') : '<p class="empty">No enquiries here yet.</p>';
+  r.sort((a, b) => (dueC(b) - dueC(a)) || (a.priority || 'Z').localeCompare(b.priority || 'Z') || a.id - b.id);
+  $('lcount').textContent = `${r.length} of ${S.cos.length}`;
+  $('leadList').innerHTML = r.length ? r.slice(0, S.shown).map(card).join('') : '<p class="empty">No leads match.</p>';
+  $('moreBtn').hidden = r.length <= S.shown;
 }
-$('login').addEventListener('submit', (e) => { e.preventDefault(); key = $('pw').value; try { sessionStorage.setItem('jk', key); } catch (x) {} $('lmsg').textContent = ''; load(); });
-$('out').addEventListener('click', () => logout(''));
-$('refresh').addEventListener('click', load);
-$('fs').addEventListener('change', draw); $('fq').addEventListener('input', draw);
-$('list').addEventListener('change', async (e) => {
-  const f = e.target.dataset.f; if (!f) return;
-  const card = e.target.closest('.card'), id = card.dataset.id, r = rows.find((x) => x.id === id);
-  r[f] = e.target.value;
-  try { await api('PATCH', { id, [f]: e.target.value }); card.querySelector('.saved').textContent = 'Saved'; if (f !== 'admin_note') draw(); }
-  catch (x) { card.querySelector('.saved').textContent = 'Not saved — try again.'; }
-});
-// two-tap confirm for destructive buttons (no browser dialogs)
-function arm(btn, label, run) {
-  btn.addEventListener('click', async () => {
-    if (!btn.classList.contains('armed')) { btn.dataset.l = btn.textContent; btn.textContent = label; btn.classList.add('armed'); setTimeout(() => { btn.classList.remove('armed'); btn.textContent = btn.dataset.l; }, 4000); return; }
-    btn.classList.remove('armed'); btn.textContent = btn.dataset.l;
-    try { const r = await run(); $('amsg').textContent = `Deleted ${r.deleted} enquiries.`; load(); } catch (x) { $('amsg').textContent = 'Could not delete. Try again.'; }
-  });
+/* ---------- lead page ---------- */
+async function openLead(id) {
+  S.lead = Number(id);
+  try { const d = await crm('company?id=' + id); S.detail = d; drawLead(); } catch (e) { if (e.message !== 'auth') toast('Could not open this lead.'); }
 }
-arm($('clearOld'), 'Tap again to clear', () => api('DELETE', { olderThanDays: 30, closedOnly: true }));
-arm($('clearAll'), 'Tap again — deletes everything', () => api('DELETE', { all: true }));
-$('list').addEventListener('click', async (e) => {
-  const b = e.target.closest('[data-del]'); if (!b) return;
-  if (!b.classList.contains('armed')) { b.classList.add('armed'); b.textContent = 'Tap again to delete'; setTimeout(() => { b.classList.remove('armed'); b.textContent = 'Delete'; }, 4000); return; }
-  const id = b.closest('.card').dataset.id;
-  try { await api('DELETE', { ids: [id] }); rows = rows.filter((r) => r.id !== id); draw(); } catch (x) { $('amsg').textContent = 'Could not delete. Try again.'; }
+function brochureLink(lang) { return `${location.origin}/pdf/Josons_Spices_${lang || 'English'}_Phone.pdf`; }
+function drawLead() {
+  const d = S.detail, c = d.company, sec = $('v-lead');
+  const hello = (n) => `Hello${n ? ' ' + n : ''}, this is Manu from Josons Spices, Aluva, Kerala. `;
+  const bro = hello(d.contacts[0]?.name) + `Here is our product brochure: ${brochureLink(c.language)}`;
+  $('title').textContent = c.company;
+  sec.innerHTML = `
+    <div class="sub" style="margin-top:12px"><b>${esc(c.lead_id)}</b> · ${[c.city, c.state].filter(Boolean).map(esc).join(', ')}${c.segment ? ' · ' + esc(c.segment) : ''}</div>
+    <div class="grid3" style="margin:10px 0">
+      <label>Status<select data-cf="status">${ST.map((s) => `<option${s === c.status ? ' selected' : ''}>${s}</option>`).join('')}</select></label>
+      <label>Priority<select data-cf="priority">${['', 'A', 'B', 'C'].map((s) => `<option value="${s}"${s === (c.priority || '') ? ' selected' : ''}>${s || '—'}</option>`).join('')}</select></label>
+      <label>Language<select data-cf="language">${LANGS.map((s) => `<option value="${s}"${s === (c.language || '') ? ' selected' : ''}>${s || '—'}</option>`).join('')}</select></label>
+    </div>
+    <label class="chk"><input type="checkbox" data-cf="is_customer"${c.is_customer ? ' checked' : ''}> We have done business with them before</label>
+    <div class="row" style="margin:12px 0"><button type="button" class="primary" id="logBtn" style="flex:1">+ Log conversation</button><button type="button" class="gold" id="askBtn">💬 Ask AI</button></div>
+
+    <h2>Contacts</h2>
+    ${d.contacts.map((k) => { const w = waLink(k.phone, hello(k.name)); return `<div class="card" data-contact="${k.id}">
+      <div class="who" style="font-size:15px">${esc(k.name || 'Contact')}${k.role ? ` <span class="sub">· ${esc(k.role)}</span>` : ''}</div>
+      <div class="sub">${[k.phone, k.email].filter(Boolean).map(esc).join(' · ') || 'No phone or email'}</div>
+      <div class="row" style="margin-top:8px">${k.phone ? `<a class="btn sm" href="tel:${esc(String(k.phone).replace(/[^\d+]/g, ''))}">📞 Call</a>` : ''}${w ? `<a class="btn sm wa" href="${w}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${k.email ? `<a class="btn sm" href="mailto:${esc(k.email)}?subject=${encodeURIComponent('Josons Spices, Aluva, Kerala')}&body=${encodeURIComponent(hello(k.name) + '\n\nOur brochure: ' + brochureLink(c.language) + '\n\nRegards,\nManu Dominic Parakkal\nJosons Spices, Aluva, Kerala\n+91 89210 63339')}">✉️ Email</a>` : ''}<button type="button" class="sm" data-editk="${k.id}">Edit</button></div></div>`; }).join('')}
+    <div class="row"><button type="button" class="sm" id="addK">+ Add contact</button>${d.contacts.some((k) => waLink(k.phone)) ? `<a class="btn sm wa" target="_blank" rel="noopener" href="${waLink(d.contacts.find((k) => waLink(k.phone)).phone, bro)}">Send brochure on WhatsApp</a>` : ''}</div>
+
+    <h2>Next step</h2>
+    <div class="grid2"><label>What<input data-cf="next_step" value="${esc(c.next_step || '')}" maxlength="400"></label><label>When<input type="date" data-cf="next_date" value="${esc(c.next_date || '')}"></label></div>
+    <div class="saved" id="cfSaved"></div>
+
+    <h2>Conversations</h2>
+    ${d.interactions.length ? `<div class="tl">${d.interactions.map((i) => `<div class="it" data-int="${i.id}"><div class="meta"><b>${dShort(i.at)}</b><span>${CH[i.channel] || i.channel}</span><span>${i.direction === 'in' ? 'they contacted us' : 'we contacted them'}</span>${i.by === 'ai' ? '<span class="pill">via AI</span>' : ''}<button type="button" class="sm danger" data-delint="${i.id}" style="margin-left:auto;min-height:30px;padding:2px 10px">Delete</button></div><div class="txt">${esc(i.summary)}</div>${i.next_step ? `<div class="sub">Next: ${esc(i.next_step)}</div>` : ''}</div>`).join('')}</div>` : '<p class="empty">No conversations logged yet.</p>'}
+
+    <details style="margin-top:14px"><summary>Company details &amp; notes</summary>
+      ${c.product_fit ? `<p class="sub"><b>Likely products:</b> ${esc(c.product_fit)}</p>` : ''}
+      ${c.website ? `<p class="sub"><b>Website:</b> <a class="link" href="${esc(c.website)}" target="_blank" rel="noopener">${esc(c.website)}</a></p>` : ''}
+      ${c.source ? `<p class="sub"><b>Source:</b> ${esc(c.source)}</p>` : ''}
+      <label>Notes<textarea data-cf="notes" rows="4" maxlength="2000">${esc(c.notes || '')}</textarea></label>
+    </details>
+    <div style="margin:24px 0"><button type="button" class="danger sm" id="delCo">Delete this company</button></div>`;
+  show('lead');
+}
+document.addEventListener('change', async (e) => {
+  const f = e.target.dataset?.cf; if (!f || S.lead == null) return;
+  const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  try { await crm('company', 'PATCH', { id: S.lead, [f]: v }); $('cfSaved') && ($('cfSaved').textContent = 'Saved'); const c = co(S.lead); if (c) { c[f] = f === 'is_customer' ? (v ? 1 : 0) : v; if (f === 'is_customer' && v) c.status = 'Customer'; } if (f === 'is_customer' || f === 'status') await openLead(S.lead); }
+  catch (x) { toast('Not saved. Try again.'); }
 });
-$('csv').addEventListener('click', () => {
-  const head = ['id', 'created_at', 'status', 'follow_up', 'name', 'business', 'btype', 'state', 'loc_city', 'loc_region', 'loc_country', 'phone', 'items', 'sample', 'notes', 'admin_note'];
-  const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const body = rows.map((r) => head.map((h) => q(h === 'items' ? r.items.map((i) => `${i.product} ${i.qty} ${i.unit}`.trim()).join('; ') : r[h])).join(','));
-  const url = URL.createObjectURL(new Blob(['﻿' + [head.join(','), ...body].join('\n')], { type: 'text/csv' }));
-  const a = document.createElement('a'); a.href = url; a.download = `josons-enquiries-${today()}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+/* contact edit */
+function contactForm(k) {
+  const d = S.detail, host = k ? document.querySelector(`[data-contact="${k.id}"]`) : $('addK').parentElement;
+  const f = document.createElement('div'); f.className = 'card';
+  f.innerHTML = `<label>Name<input id="kn" value="${esc(k?.name || '')}"></label><label>Role<input id="kr" value="${esc(k?.role || '')}" placeholder="e.g. Purchase manager"></label><div class="grid2"><label>Phone<input id="kp" type="tel" value="${esc(k?.phone || '')}"></label><label>Email<input id="ke" type="email" value="${esc(k?.email || '')}"></label></div>
+    <div class="row" style="margin-top:8px"><button type="button" class="primary sm" id="ks">Save</button><button type="button" class="sm" id="kc">Cancel</button>${k ? '<button type="button" class="danger sm" id="kd">Delete</button>' : ''}</div>`;
+  host.replaceWith(f); f.querySelector('#kn').focus();
+  const body = () => ({ id: k?.id, company_id: d.company.id, name: f.querySelector('#kn').value, role: f.querySelector('#kr').value, phone: f.querySelector('#kp').value, email: f.querySelector('#ke').value });
+  f.querySelector('#ks').onclick = async () => { try { await crm('contact', k ? 'PATCH' : 'POST', body()); await load(); await openLead(d.company.id); } catch (x) { toast('Not saved.'); } };
+  f.querySelector('#kc').onclick = () => drawLead();
+  if (k) f.querySelector('#kd').onclick = async function () { if (!this.classList.contains('armed')) { this.classList.add('armed'); this.textContent = 'Tap again'; return; } try { await crm('contact', 'DELETE', { id: k.id }); await load(); await openLead(d.company.id); } catch (x) { toast('Not deleted.'); } };
+}
+/* ---------- log sheet ---------- */
+let lg = { channel: 'call', direction: 'out' };
+function chips(el, items, cur, cb) { el.innerHTML = items.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === cur}">${l}</button>`).join(''); el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; [...el.children].forEach((x) => x.setAttribute('aria-pressed', x === b)); cb(b.dataset.v); }; }
+function openLog() {
+  const c = S.detail.company; $('logTitle').textContent = 'Log · ' + c.company;
+  lg = { channel: 'call', direction: 'out' };
+  chips($('chChan'), Object.entries(CH), 'call', (v) => lg.channel = v);
+  chips($('chDir'), [['out', 'I contacted them'], ['in', 'They contacted me']], 'out', (v) => lg.direction = v);
+  $('lgText').value = ''; $('lgNext').value = ''; $('lgDate').value = ''; $('lgMsg').textContent = '';
+  $('lgStatus').innerHTML = '<option value="">Keep as it is</option>' + ST.map((s) => `<option>${s}</option>`).join('');
+  overlay('logSheet'); setTimeout(() => $('lgText').focus(), 50);
+}
+$('lgSave').onclick = async () => {
+  const txt = $('lgText').value.trim(); if (!txt) { $('lgMsg').textContent = 'Write a short note first.'; return; }
+  $('lgSave').disabled = true;
+  try {
+    await crm('interaction', 'POST', { company_id: S.detail.company.id, channel: lg.channel, direction: lg.direction, summary: txt, original_text: txt, next_step: $('lgNext').value.trim() || undefined, next_date: $('lgDate').value || undefined, status: $('lgStatus').value || undefined });
+    closeOverlays(); toast('Saved'); await load(); await openLead(S.detail.company.id);
+  } catch (e) { $('lgMsg').textContent = e.message === 'auth' ? '' : 'Could not save. Try again.'; }
+  $('lgSave').disabled = false;
+};
+$('lgCancel').onclick = () => closeOverlays();
+/* ---------- enquiries (from the website cart) ---------- */
+let enq = [], enqLoaded = false;
+const EST = ['New', 'Quoted', 'Sample sent', 'Ordered', 'Lost'];
+async function loadEnq() { try { enq = (await api('enquiries')).enquiries; enqLoaded = true; drawEnq(); } catch (e) { if (e.message !== 'auth') $('enqList').innerHTML = '<p class="empty">Could not load enquiries.</p>'; } }
+function drawEnq() {
+  const f = $('es').value, q = $('eq').value.trim().toLowerCase(), t = S.today;
+  const vis = enq.filter((r) => (!f || r.status === f) && (!q || [r.id, r.name, r.business, r.state, r.btype, r.notes, r.admin_note, ...r.items.map((i) => i.product)].join(' ').toLowerCase().includes(q)));
+  $('enqList').innerHTML = vis.length ? vis.map((r) => {
+    const due = r.follow_up && r.follow_up <= t && !['Ordered', 'Lost'].includes(r.status);
+    const w = waLink(r.phone, `Hello ${r.name || ''}, thank you for your enquiry ${r.id} to Josons Spices.`);
+    return `<article class="card${due ? ' due' : ''}" data-eid="${esc(r.id)}"><div class="row" style="justify-content:space-between"><b class="sub">${esc(r.id)}</b><span class="sub">${new Date(r.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span></div>
+      <div class="who">${esc(r.name || 'No name')}${r.business ? ' · ' + esc(r.business) : ''}</div><div class="sub">${[r.btype, r.state, r.phone].filter(Boolean).map(esc).join(' · ')}</div>
+      <ul style="margin:6px 0;padding-left:18px">${r.items.map((i) => `<li>${esc(i.product)}${i.qty ? ` — ${esc(i.qty)} ${esc(i.unit)}` : ''}</li>`).join('')}</ul>${r.sample ? '<div class="sub"><b>Sample requested</b></div>' : ''}${r.notes ? `<div class="sub">“${esc(r.notes)}”</div>` : ''}
+      <div class="grid2" style="margin-top:8px"><label>Status<select data-ef="status">${EST.map((s) => `<option${s === r.status ? ' selected' : ''}>${s}</option>`).join('')}</select></label><label>Follow up<input type="date" data-ef="follow_up" value="${esc(r.follow_up || '')}"></label></div>
+      <label style="margin-top:6px">Note<textarea data-ef="admin_note" rows="2" maxlength="500">${esc(r.admin_note || '')}</textarea></label>
+      <div class="row" style="margin-top:8px;justify-content:space-between">${w ? `<a class="btn sm wa" href="${w}" target="_blank" rel="noopener">Reply on WhatsApp</a>` : '<span class="sub">No phone</span>'}<span class="row"><button type="button" class="sm" data-enq2lead="${esc(r.id)}">Add as lead</button><button type="button" class="sm danger" data-edel>Delete</button></span></div></article>`; }).join('') : '<p class="empty">No enquiries yet.</p>';
+}
+$('es').onchange = drawEnq; $('eq').oninput = drawEnq;
+$('enqList').addEventListener('change', async (e) => { const f = e.target.dataset.ef; if (!f) return; const id = e.target.closest('.card').dataset.eid, r = enq.find((x) => x.id === id); r[f] = e.target.value; try { await api('enquiries', 'PATCH', { id, [f]: e.target.value }); if (f !== 'admin_note') drawEnq(); } catch (x) { toast('Not saved.'); } });
+$('enqList').addEventListener('click', async (e) => {
+  const b = e.target.closest('button'); if (!b) return; const id = b.closest('.card')?.dataset.eid;
+  if (b.dataset.edel !== undefined) { if (!b.classList.contains('armed')) { b.classList.add('armed'); b.textContent = 'Tap again'; setTimeout(() => { b.classList.remove('armed'); b.textContent = 'Delete'; }, 4000); return; } try { await api('enquiries', 'DELETE', { ids: [id] }); enq = enq.filter((x) => x.id !== id); drawEnq(); } catch (x) { toast('Not deleted.'); } }
+  if (b.dataset.enq2lead) { const r = enq.find((x) => x.id === b.dataset.enq2lead); try { const res = await crm('company', 'POST', { company: r.business || r.name || 'Website enquiry', state: r.state, segment: r.btype, source: 'Website enquiry ' + r.id, notes: 'Wanted: ' + r.items.map((i) => `${i.product} ${i.qty || ''} ${i.unit || ''}`.trim()).join('; ') + (r.notes ? ' | ' + r.notes : ''), contact: { name: r.name, phone: r.phone } }); await load(); toast('Added as lead ' + res.lead_id); go('lead', res.id); } catch (x) { toast('Could not add.'); } }
 });
-if (key) load();
+function armAll(btn, label, run) { btn.addEventListener('click', async () => { if (!btn.classList.contains('armed')) { btn.dataset.l = btn.textContent; btn.textContent = label; btn.classList.add('armed'); setTimeout(() => { btn.classList.remove('armed'); btn.textContent = btn.dataset.l; }, 4000); return; } btn.classList.remove('armed'); btn.textContent = btn.dataset.l; try { const r = await run(); toast(`Deleted ${r.deleted}`); loadEnq(); } catch (x) { toast('Could not delete.'); } }); }
+armAll($('clearOld'), 'Tap again to clear', () => api('enquiries', 'DELETE', { olderThanDays: 30, closedOnly: true }));
+armAll($('clearAll'), 'Tap again: deletes all', () => api('enquiries', 'DELETE', { all: true }));
+/* ---------- import / export ---------- */
+function parseCSV(t) {
+  const rows = []; let r = [], f = '', q = false; t = t.replace(/^﻿/, '');
+  for (let i = 0; i < t.length; i++) { const ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; }
+    else if (ch === '"') q = true; else if (ch === ',') { r.push(f); f = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; r.push(f); f = ''; if (r.some((x) => x !== '')) rows.push(r); r = []; } else f += ch; }
+  r.push(f); if (r.some((x) => x !== '')) rows.push(r);
+  const h = (rows.shift() || []).map((x) => x.trim().toLowerCase());
+  return rows.map((x) => Object.fromEntries(h.map((k, i) => [k, (x[i] || '').trim()])));
+}
+const csvQ = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+function download(name, rows, cols) { const url = URL.createObjectURL(new Blob(['﻿' + [cols.join(','), ...rows.map((r) => cols.map((c) => csvQ(r[c])).join(','))].join('\n')], { type: 'text/csv' })); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 3000); }
+let impRows = [];
+$('csvFile').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; impRows = parseCSV(await f.text()).filter((r) => r.company); $('impInfo').textContent = impRows.length ? `${impRows.length} rows ready.` : 'No rows with a company name were found.'; $('impGo').hidden = !impRows.length; $('impGo').textContent = `Import ${impRows.length}`; };
+$('impGo').onclick = async () => {
+  $('impGo').disabled = true; const t = { added: 0, skipped: 0, upgraded: 0, failed: 0 };
+  try { for (let i = 0; i < impRows.length; i += 50) { $('impInfo').textContent = `Importing ${Math.min(i + 50, impRows.length)} of ${impRows.length}…`; const r = await crm('import', 'POST', { rows: impRows.slice(i, i + 50) }); for (const k in t) t[k] += r[k] || 0; } $('impInfo').textContent = `Done: ${t.added} added, ${t.skipped} already there, ${t.upgraded} marked as customers, ${t.failed} failed.`; impRows = []; $('impGo').hidden = true; $('csvFile').value = ''; await load(); }
+  catch (e) { $('impInfo').textContent = 'Import stopped. Some rows may already be in. Choose the file again and re-run: existing ones are skipped.'; }
+  $('impGo').disabled = false;
+};
+$('tplBtn').onclick = () => download('josons-import-template.csv', [{ company: 'Example Traders', city: 'Kochi', state: 'Kerala', contact_name: 'A. Kumar', phone: '9876543210', email: 'a@example.com', product_fit: 'Pepper, cardamom', is_customer: 'Y' }], ['lead_id', 'company', 'city', 'state', 'segment', 'priority', 'product_fit', 'contact_name', 'email', 'phone', 'phone2', 'website', 'source', 'notes', 'next_step', 'status', 'is_customer', 'language']);
+$('expCo').onclick = async () => { const d = await crm('export'); const k = new Map(); d.contacts.forEach((x) => { if (!k.has(x.company_id)) k.set(x.company_id, []); k.get(x.company_id).push(x); });
+  download(`josons-companies-${S.today}.csv`, d.companies.map((c) => ({ ...c, contacts: (k.get(c.id) || []).map((x) => [x.name, x.role, x.phone, x.email].filter(Boolean).join(' / ')).join(' ; ') })), ['lead_id', 'company', 'city', 'state', 'segment', 'priority', 'status', 'is_customer', 'language', 'product_fit', 'contacts', 'website', 'next_step', 'next_date', 'last_contact', 'source', 'notes']); };
+$('expIn').onclick = async () => { const d = await crm('export'); const m = new Map(d.companies.map((c) => [c.id, c])); download(`josons-conversations-${S.today}.csv`, d.interactions.map((i) => ({ ...i, lead_id: m.get(i.company_id)?.lead_id, company: m.get(i.company_id)?.company })), ['lead_id', 'company', 'at', 'channel', 'direction', 'summary', 'next_step', 'by']); };
+$('refresh').onclick = () => load().then(() => toast('Refreshed'));
+$('out').onclick = () => logout('');
+/* ---------- add lead ---------- */
+$('addLead').onclick = () => {
+  const host = $('leadList'); host.insertAdjacentHTML('afterbegin', `<div class="card" id="newForm"><label>Company<input id="nc" autocomplete="off"></label><div class="grid2"><label>City<input id="ncity"></label><label>State<input id="nstate"></label></div><label>Contact name<input id="nname"></label><div class="grid2"><label>Phone<input id="nph" type="tel"></label><label>Email<input id="nem" type="email"></label></div><label class="chk"><input type="checkbox" id="ncust"> Past customer</label><div class="row" style="margin-top:8px"><button type="button" class="primary sm" id="nsave">Save</button><button type="button" class="sm" id="ncancel">Cancel</button></div></div>`);
+  $('nc').focus(); $('ncancel').onclick = () => $('newForm').remove();
+  $('nsave').onclick = async () => { if (!$('nc').value.trim()) return toast('Company name needed'); try { const r = await crm('company', 'POST', { company: $('nc').value, city: $('ncity').value, state: $('nstate').value, is_customer: $('ncust').checked, contact: { name: $('nname').value, phone: $('nph').value, email: $('nem').value } }); await load(); go('lead', r.id); } catch (e) { toast('Could not save.'); } };
+};
+/* ---------- voice ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const VL = [['en-IN', 'English'], ['ml-IN', 'Malayalam'], ['hi-IN', 'Hindi'], ['ta-IN', 'Tamil']];
+document.querySelectorAll('.micLang').forEach((s) => { s.innerHTML = VL.map(([v, l]) => `<option value="${v}">🎤 ${l}</option>`).join(''); s.value = lsGet('jl', 'en-IN'); s.onchange = () => { lsSet('jl', s.value); document.querySelectorAll('.micLang').forEach((x) => x.value = s.value); }; });
+function mic(btn, ta, sel) {
+  if (!SR) { btn.hidden = true; sel.hidden = true; return; }
+  let rec = null, base = '';
+  btn.onclick = () => {
+    if (rec) { rec.stop(); return; }
+    rec = new SR(); rec.lang = sel.value; rec.interimResults = true; rec.continuous = true; base = ta.value ? ta.value.replace(/\s*$/, ' ') : '';
+    rec.onresult = (e) => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = base + t; ta.dispatchEvent(new Event('input')); };
+    rec.onerror = (e) => { toast(e.error === 'not-allowed' ? 'Allow microphone access to speak.' : 'Could not hear that. Try again.'); };
+    rec.onend = () => { rec = null; btn.setAttribute('aria-pressed', 'false'); };
+    try { rec.start(); btn.setAttribute('aria-pressed', 'true'); } catch (e) { rec = null; }
+  };
+}
+mic($('lgMic'), $('lgText'), $('lgLang')); mic($('chMic'), $('chText'), $('chLang'));
+/* ---------- AI chat ---------- */
+let chat = [], chatBusy = false;
+const SUG = ['Who should I follow up today?', 'Give me a pipeline summary', 'Which customers have we done business with?'];
+function openChat() {
+  const c = S.lead != null && S.tab === 'lead' ? S.detail?.company : null;
+  $('chCtx').textContent = c ? 'About: ' + c.company : '';
+  if (!chat.length) drawChat();
+  overlay('chat'); setTimeout(() => $('chText').focus(), 80);
+}
+function bub(t, who) { return `<div class="bub ${who}">${esc(t)}</div>`; }
+function propHtml(p, i, mi) {
+  if (p.type === 'whatsapp') { const w = waLink(p.phone, p.message); return `<div class="prop"><div class="k">WhatsApp draft · ${esc(p.company)}</div><div style="white-space:pre-wrap;margin:6px 0">${esc(p.message)}</div><div class="row">${w ? `<a class="btn sm wa" href="${w}" target="_blank" rel="noopener">Open WhatsApp</a>` : '<span class="sub">No WhatsApp number on file</span>'}<button type="button" class="sm" data-copy="${mi}:${i}">Copy</button></div></div>`; }
+  let k, body;
+  if (p.type === 'log') { k = `Save conversation · ${esc(p.company)} (${esc(p.lead_id)})`; body = `<div>${esc(CH[p.channel] || p.channel)} · ${p.direction === 'in' ? 'they contacted us' : 'we contacted them'}${p.at ? ' · ' + dShort(p.at) : ''}</div><div style="white-space:pre-wrap;margin:4px 0">${esc(p.summary)}</div>${p.next_step || p.next_date ? `<div class="sub"><b>Next:</b> ${esc(p.next_step)} ${p.next_date ? '· ' + dShort(p.next_date) : ''}</div>` : ''}${p.status ? `<div class="sub"><b>Status →</b> ${esc(p.status)}</div>` : ''}`; }
+  else if (p.type === 'update') { k = `Update · ${esc(p.company)} (${esc(p.lead_id)})`; body = Object.entries(p.changes).map(([a, v]) => `<div class="sub"><b>${esc(a.replace('_', ' '))}:</b> ${esc(String(v))}</div>`).join(''); }
+  else { k = 'Add new company'; const f = p.fields; body = `<div><b>${esc(f.company)}</b> ${[f.city, f.state].filter(Boolean).map(esc).join(', ')}</div><div class="sub">${[p.contact.name, p.contact.phone, p.contact.email].filter(Boolean).map(esc).join(' · ')}${f.is_customer ? ' · past customer' : ''}</div>${f.notes ? `<div class="sub">${esc(f.notes)}</div>` : ''}`; }
+  return `<div class="prop" data-prop="${mi}:${i}"><div class="k">${k}</div>${body}<div class="row" style="margin-top:8px"><button type="button" class="primary sm" data-save="${mi}:${i}">Save</button><button type="button" class="sm" data-skip="${mi}:${i}">Dismiss</button></div></div>`;
+}
+function drawChat() {
+  const log = $('chatlog');
+  if (!chat.length) { log.innerHTML = `<div class="bub a">Hi Manu! Tell me about a call or message and I'll prepare the note for you to confirm. You can also ask me things like “who haven't I called yet in Gujarat?”.</div><div class="chips">${SUG.map((s) => `<button type="button" class="sm" data-sug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; return; }
+  log.innerHTML = chat.map((m, mi) => m.role === 'user' ? bub(m.content, 'u') : bub(m.content, 'a') + (m.props || []).map((p, i) => m.done?.[i] ? `<div class="prop done">✓ ${p.type === 'log' ? 'Conversation saved' : p.type === 'update' ? 'Updated' : 'Added'}: ${esc(p.company || p.fields?.company || '')}</div>` : m.skip?.[i] ? '' : propHtml(p, i, mi)).join('')).join('') + (chatBusy ? '<div class="bub a">…</div>' : '');
+  log.scrollTop = log.scrollHeight;
+}
+async function sendChat(text) {
+  text = (text || $('chText').value).trim(); if (!text || chatBusy) return;
+  $('chText').value = ''; chat.push({ role: 'user', content: text }); chatBusy = true; drawChat();
+  try {
+    const msgs = chat.map((m) => ({ role: m.role, content: m.content }));
+    const r = await crm('ai', 'POST', { messages: msgs, company_id: S.tab === 'lead' ? S.lead : undefined });
+    chat.push({ role: 'assistant', content: r.reply, props: r.proposals || [], done: {}, skip: {}, orig: text });
+  } catch (e) { if (e.message === 'auth') return; chat.push({ role: 'assistant', content: e.message && e.message !== 'server' ? e.message : 'Something went wrong. Please try again.' }); }
+  chatBusy = false; drawChat();
+}
+$('chSend').onclick = () => sendChat();
+$('chText').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !('ontouchstart' in window)) { e.preventDefault(); sendChat(); } });
+$('chText').addEventListener('input', function () { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 140) + 'px'; });
+$('chatlog').addEventListener('click', async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.sug) return sendChat(b.dataset.sug);
+  const [mi, i] = (b.dataset.save || b.dataset.skip || b.dataset.copy || '').split(':').map(Number); const m = chat[mi]; if (!m) return;
+  if (b.dataset.skip !== undefined) { m.skip[i] = true; drawChat(); }
+  if (b.dataset.copy !== undefined) { try { await navigator.clipboard.writeText(m.props[i].message); toast('Copied'); } catch (x) { toast('Could not copy'); } }
+  if (b.dataset.save !== undefined) {
+    b.disabled = true;
+    try { const r = await crm('apply', 'POST', { proposals: [m.props[i]], original_text: m.orig }); if (r.results[0]?.ok) { m.done[i] = true; await load(); if (S.tab === 'lead' && S.lead) openLead(S.lead); } else { toast(r.results[0]?.error || 'Could not save.'); b.disabled = false; } }
+    catch (x) { toast('Could not save.'); b.disabled = false; }
+    drawChat();
+  }
+});
+$('fab').onclick = openChat; $('chatClose').onclick = () => closeOverlays();
+/* ---------- navigation ---------- */
+const VIEWS = ['today', 'leads', 'lead', 'enq', 'more'];
+function show(v) {
+  S.tab = v; VIEWS.forEach((x) => $('v-' + x).hidden = x !== v);
+  document.querySelectorAll('#tabs button').forEach((b) => b.setAttribute('aria-current', String(b.dataset.tab === v || (v === 'lead' && b.dataset.tab === 'leads'))));
+  $('back').style.display = v === 'lead' ? 'inline-flex' : 'none';
+  $('title').textContent = { today: 'Today', leads: 'Leads', enq: 'Website enquiries', more: 'More', lead: $('title').textContent }[v];
+  if (v === 'today') drawToday(); if (v === 'leads') drawLeads(); if (v === 'enq') { drawEnq(); if (!enqLoaded) loadEnq(); }
+  window.scrollTo(0, 0);
+}
+function go(v, id) { location.hash = id ? `#${v}/${id}` : '#' + v; }
+function route() {
+  if (!key || $('app').hidden) return;
+  const [v, id] = location.hash.slice(1).split('/');
+  if (v === 'lead' && id && co(id)) { if (S.lead !== Number(id) || S.tab !== 'lead' || !S.detail || S.detail.company.id !== Number(id)) openLead(id); else show('lead'); }
+  else show(VIEWS.includes(v) && v !== 'lead' ? v : 'today');
+}
+window.addEventListener('hashchange', () => { closeOverlays(true); route(); });
+document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => go(b.dataset.tab));
+$('back').onclick = () => history.length > 1 ? history.back() : go('leads');
+document.addEventListener('click', (e) => {
+  const o = e.target.closest('[data-open]'); if (o) return go('lead', o.dataset.open);
+  if (e.target.id === 'logBtn') openLog(); if (e.target.id === 'askBtn') openChat();
+  if (e.target.id === 'addK') contactForm(null);
+  const ek = e.target.closest('[data-editk]'); if (ek) contactForm(S.detail.contacts.find((k) => k.id === Number(ek.dataset.editk)));
+  const di = e.target.closest('[data-delint]'); if (di) { if (!di.classList.contains('armed')) { di.classList.add('armed'); di.textContent = 'Tap again'; return; } crm('interaction', 'DELETE', { id: Number(di.dataset.delint) }).then(() => { load().then(() => openLead(S.lead)); }).catch(() => toast('Not deleted.')); }
+  if (e.target.id === 'delCo') { const b = e.target; if (!b.classList.contains('armed')) { b.classList.add('armed'); b.textContent = 'Tap again: deletes it and all its notes'; return; } crm('company', 'DELETE', { id: S.lead }).then(async () => { S.lead = null; S.detail = null; await load(); go('leads'); }).catch(() => toast('Not deleted.')); }
+});
+['fq', 'fs', 'fp', 'fst', 'fc'].forEach((id) => $(id).addEventListener(id === 'fq' ? 'input' : 'change', () => { S.shown = 60; drawLeads(); }));
+$('moreBtn').onclick = () => { S.shown += 60; drawLeads(); };
+/* overlays (sheets): the phone's Back button closes them */
+function overlay(id) { $(id).hidden = false; history.pushState({ o: id }, ''); document.body.style.overflow = 'hidden'; }
+function closeOverlays(fromHash) { let any = false; ['logSheet', 'chat'].forEach((id) => { if (!$(id).hidden) { $(id).hidden = true; any = true; } }); document.body.style.overflow = ''; if (any && !fromHash && history.state?.o) history.back(); }
+window.addEventListener('popstate', () => { if (!history.state?.o) { ['logSheet', 'chat'].forEach((id) => $(id).hidden = true); document.body.style.overflow = ''; } });
+/* ---------- login ---------- */
+$('login').addEventListener('submit', (e) => { e.preventDefault(); key = $('pw').value; remember = $('remember').checked; try { (remember ? localStorage : sessionStorage).setItem('jk', key); } catch (x) {} $('lmsg').textContent = ''; load(true); });
+if (key) load(true);
 </script>
 </body>
 </html>
