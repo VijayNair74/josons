@@ -11,7 +11,7 @@ for f in (D / 'img').iterdir():
     elif f.suffix == '.png':
         im = Image.open(f).convert('RGBA'); im.thumbnail((240, 240)); im.quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(P / f.name, optimize=True)
 
-WA = '919447029905'
+WA = '918921063339'
 wa = lambda t: f'https://wa.me/{WA}?text=' + urllib.parse.quote(t)
 CATS = [('spices', 'Spices &amp; Roots', 'linear-gradient(120deg,#0F3D2E,#185A43)'), ('nuts', 'Nuts &amp; Beans', 'linear-gradient(120deg,#8B4A2B,#4f2614)'), ('herbal', 'Ayurvedic &amp; Herbal', 'linear-gradient(120deg,#8B4A2B,#4f2614)')]
 PER = 6
@@ -78,7 +78,7 @@ def build(lang):
 <div class="how"><div class="step"><b>1</b><div><strong>Pick your products</strong>Tap any product in this brochure. It opens WhatsApp with the name filled in.</div></div>
 <div class="step"><b>2</b><div><strong>Tell us the quantity</strong>Send the message with the amount you need. Samples are available.</div></div>
 <div class="step"><b>3</b><div><strong>Get today's price</strong>We reply with the current price and dispatch from Aluva by road, rail or courier.</div></div>
-<div class="contact"><span>WHATSAPP</span>+91 94470 29905<br><span>PHONE</span>+91 484 262 3585<br><span>EMAIL</span>manudparakkal@hotmail.com<br><span>VISIT</span>Parakkal Buildings, Aluva, Kerala</div>
+<div class="contact"><span>WHATSAPP</span>+91 89210 63339<br><span>EMAIL</span>josonsspices@gmail.com<br><span>VISIT</span>Parakkal Buildings, Aluva, Kerala</div>
 <a class="btn" style="margin:6mm 4mm 0" href="{wa("Hello Josons, I would like a quote.")}">Enquire on WhatsApp</a></div>
 <div class="foot"><span>Prices on request · Not in the list? Ask, we source on request</span><span>{N} / {N}</span></div></section>''')
     css = CSS + (FONT_CSS if lang != 'en' else '')

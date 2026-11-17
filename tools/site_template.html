@@ -259,7 +259,7 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
     <p>Whole spices, nuts, beans and Ayurvedic raw materials — sourced, graded and supplied from Aluva by a family with generations in the spice trade.</p>
     <div class="btns">
       <a class="btn gold" href="#catalogue">See the catalogue</a>
-      <a class="btn wa" id="heroWa" href="https://wa.me/919447029905" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      <a class="btn wa" id="heroWa" href="https://wa.me/918921063339" target="_blank" rel="noopener">Chat on WhatsApp</a>
     </div>
   </div>
 </div></section>
@@ -322,7 +322,7 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
   <div class="langline" id="langline"></div>
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" hidden>Nothing matches that name. Try another spelling, or ask us on WhatsApp — we source on request.</div>
-  <div class="cta"><span>Need something not listed? Tell us what you're looking for — we source on request.</span><a class="btn gold" href="https://wa.me/919447029905?text=Hello%20Josons%2C%20I%20am%20looking%20for%3A%20" target="_blank" rel="noopener">Ask on WhatsApp</a></div>
+  <div class="cta"><span>Need something not listed? Tell us what you're looking for — we source on request.</span><a class="btn gold" href="https://wa.me/918921063339?text=Hello%20Josons%2C%20I%20am%20looking%20for%3A%20" target="_blank" rel="noopener">Ask on WhatsApp</a></div>
 </div></section>
 
 <section class="s order" id="order"><div class="wrap">
@@ -334,12 +334,11 @@ dialog::-webkit-scrollbar,.bkscroll::-webkit-scrollbar{width:10px}dialog::-webki
   </div>
   <div class="contact">
     <div class="cl"><h3>Josons Spices</h3>
-      <div class="row"><span class="k">MOBILE</span><span class="v" id="v1">+91 94470 29905</span><button class="copy" type="button" data-copy="v1">Copy</button></div>
-      <div class="row"><span class="k">PHONE</span><span class="v" id="v2">+91 484 262 3585</span><button class="copy" type="button" data-copy="v2">Copy</button></div>
-      <div class="row"><span class="k">EMAIL</span><span class="v" id="v3">manudparakkal@hotmail.com</span><button class="copy" type="button" data-copy="v3">Copy</button></div>
+      <div class="row"><span class="k">MOBILE</span><span class="v" id="v1">+91 89210 63339</span><button class="copy" type="button" data-copy="v1">Copy</button></div>
+      <div class="row"><span class="k">EMAIL</span><span class="v" id="v3">josonsspices@gmail.com</span><button class="copy" type="button" data-copy="v3">Copy</button></div>
       <div class="row"><span class="k">VISIT</span><span class="v" style="font-weight:500;font-size:14.5px">Parakkal Buildings, Aluva, Kerala</span></div>
     </div>
-    <div class="wa-side"><p>Quickest reply is on WhatsApp. Tell us the product and quantity.</p><a class="btn wa" href="https://wa.me/919447029905?text=Hello%20Josons%2C%20I%20would%20like%20a%20quote." target="_blank" rel="noopener">WhatsApp us</a></div>
+    <div class="wa-side"><p>Quickest reply is on WhatsApp. Tell us the product and quantity.</p><a class="btn wa" href="https://wa.me/918921063339?text=Hello%20Josons%2C%20I%20would%20like%20a%20quote." target="_blank" rel="noopener">WhatsApp us</a></div>
   </div>
 </div></section>
 </main>
@@ -506,7 +505,7 @@ function openProduct(slug) {
   $('dMeta').innerHTML = meta.map(([k, v]) => `<dt>${k}</dt><dd>${k === 'Botanical' ? `<i>${esc(v)}</i>` : esc(v)}</dd>`).join('');
   $('dNote').hidden = !c.note; $('dNote').textContent = c.note ? c.note.replace(/^Manu: /, '') : '';
   const txt = `Hello Josons, I would like a quote for ${p.name}${L ? ` (${L.name})` : ''}. Quantity: `;
-  $('dWa').href = 'https://wa.me/919447029905?text=' + encodeURIComponent(txt);
+  $('dWa').href = 'https://wa.me/918921063339?text=' + encodeURIComponent(txt);
   $('dNames').innerHTML = '<tr><td colspan="2" style="border:0;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Names across India</td></tr>' +
     D.langs.filter(([k]) => c.names[k]).map(([k, l]) => { const nv = (c.native || {})[k]; return `<tr class="${k === lang ? 'me' : ''}"><td>${l}</td><td${nv ? ` class="nat" lang="${k}"` : ''}>${esc(nv || c.names[k])}${nv ? `<span class="lt">${esc(c.names[k])}</span>` : ''}</td></tr>`; }).join('');
   const d = $('dlg'); if (!d.open) d.showModal();
@@ -534,7 +533,7 @@ $('cal').innerHTML = '<thead><tr><th></th>' + [...M].map((m) => `<th scope="col"
   CAL.map(([n, c, ms]) => `<tr><td class="cn">${esc(n)}</td>` + [...M].map((_, i) => `<td>${ms.includes(i + 1) ? `<i style="background:${c}"></i>` : ''}</td>`).join('') + '</tr>').join('') + '</tbody>';
 
 /* ---------- enquiry basket ---------- */
-const WA = '919447029905';
+const WA = '918921063339';
 let curSlug = null, basket = [];
 const UNITS = ['kg', 'quintal', 'tonne'];
 try { basket = JSON.parse(localStorage.getItem('josons-basket') || '[]').filter((b) => D.products.some((p) => p.slug === b.slug)); } catch (e) { basket = []; }

@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 
 D = pathlib.Path('/root/flyer')
 
-qrcode.make("mailto:manudparakkal@hotmail.com?subject=Product%20enquiry%20-%20Josons%20Spices",
+qrcode.make("mailto:josonsspices@gmail.com?subject=Product%20enquiry%20-%20Josons%20Spices",
             border=1, box_size=12).save(D / 'img/qr.png')
 
 SPICES = [
@@ -54,7 +54,7 @@ def card(p, n, s, cls=""):
 def note(title, body, color):
     return f'<div class="card note" style="background:{color}"><div class="nt">{title}</div><div class="nb">{body}</div></div>'
 
-FOOT = '''<div class="foot"><span>JOSONS SPICES · Parakkal Buildings, Aluva, Kerala</span><span>+91 94470 29905 · manudparakkal@hotmail.com</span></div>'''
+FOOT = '''<div class="foot"><span>JOSONS SPICES · Parakkal Buildings, Aluva, Kerala</span><span>+91 89210 63339 · josonsspices@gmail.com</span></div>'''
 KASAVU = '<div class="kasavu"></div>'
 
 def cat_page(grad, eyebrow, title, num, inner):
@@ -369,9 +369,8 @@ body {{ font-family:Poppins,sans-serif; color:var(--ink); -webkit-print-color-ad
   <div class="contact">
     <div class="cl">
       <h4>Josons Spices</h4>
-      <div class="row"><div class="k">MOBILE</div><div class="v">+91 94470 29905</div></div>
-      <div class="row"><div class="k">PHONE</div><div class="v">+91 484 262 3585</div></div>
-      <div class="row"><div class="k">EMAIL</div><div class="v">manudparakkal@hotmail.com</div></div>
+      <div class="row"><div class="k">MOBILE</div><div class="v">+91 89210 63339</div></div>
+      <div class="row"><div class="k">EMAIL</div><div class="v">josonsspices@gmail.com</div></div>
       <div class="row"><div class="k">VISIT</div><div class="v" style="font-size:9.5pt;font-weight:500">Parakkal Buildings<br>Aluva<br>Kerala</div></div>
     </div>
     <div class="qr"><img src="img/qr.png"><span>Scan to email<br>an enquiry</span></div>

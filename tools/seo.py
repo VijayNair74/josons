@@ -33,10 +33,10 @@ def apply(tpl, D):
     # 4. structured data
     org = {'@type': 'Organization', '@id': SITE + '/#org', 'name': 'Josons Spices', 'url': SITE + '/', 'logo': SITE + '/img/logo.png',
            'description': 'Family-run wholesale supplier of whole spices, nuts, beans and Ayurvedic raw materials from Aluva, Kerala.',
-           'email': 'manudparakkal@hotmail.com',
+           'email': 'josonsspices@gmail.com',
            'address': {'@type': 'PostalAddress', 'streetAddress': 'Parakkal Buildings', 'addressLocality': 'Aluva', 'addressRegion': 'Kerala', 'addressCountry': 'IN'},
-           'contactPoint': [{'@type': 'ContactPoint', 'telephone': '+91-484-262-3585', 'contactType': 'sales', 'availableLanguage': ['English', 'Malayalam', 'Hindi']},
-                            {'@type': 'ContactPoint', 'telephone': '+91-94470-29905', 'contactType': 'sales (WhatsApp)'}]}
+           'contactPoint': [
+                            {'@type': 'ContactPoint', 'telephone': '+91-89210-63339', 'contactType': 'sales (WhatsApp)'}]}
     items = []
     for i, p in enumerate(P, 1):
         c = C[p['c']]; a = aka(p)
@@ -55,7 +55,7 @@ def apply(tpl, D):
     sm += [f'<url><loc>{SITE}/pdf/{os.path.basename(f)}</loc><lastmod>{today}</lastmod><priority>0.5</priority></url>' for f in pdfs] + ['</urlset>']
     open('/root/site/seo/sitemap.xml', 'w').write('\n'.join(sm) + '\n')
     open('/root/site/seo/robots.txt', 'w').write(f'User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /api/\n\nSitemap: {SITE}/sitemap.xml\n')
-    L = ['# Josons Spices', '', '> Family-run wholesale supplier of whole spices, nuts, beans and Ayurvedic raw materials, based in Aluva, Kerala, India. Prices on request. Enquiries by WhatsApp +91 94470 29905, phone +91 484 262 3585 or manudparakkal@hotmail.com.', '',
+    L = ['# Josons Spices', '', '> Family-run wholesale supplier of whole spices, nuts, beans and Ayurvedic raw materials, based in Aluva, Kerala, India. Prices on request. Enquiries by WhatsApp +91 89210 63339 or josonsspices@gmail.com.', '',
          f'The catalogue has {n} products. Product names are shown in 12 Indian languages. Brochures are available as PDF in English and 12 Indian languages.', '', '## Pages', f'- [Catalogue and enquiry]({SITE}/#catalogue): all products, search in any language, enquiry cart that sends one WhatsApp message', '', '## Brochures (PDF, 8 pages)']
     L += [f'- [{os.path.basename(f)[14:-4].replace('_Phone',' (phone format)')}]({SITE}/pdf/{os.path.basename(f)})' for f in pdfs]
     for k, name in CAT.items():
