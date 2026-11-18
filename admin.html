@@ -59,6 +59,11 @@ nav.tabs button{border:0;border-radius:0;background:transparent;flex-direction:c
 nav.tabs button span{font-size:20px;line-height:1.1}
 nav.tabs button[aria-current=true]{color:var(--leaf2);font-weight:600;box-shadow:inset 0 3px 0 var(--gold)}
 #fab{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:31;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:12px 20px}
+#callSheet{z-index:80}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opts button{min-height:52px;border-radius:14px;text-align:left;justify-content:flex-start;font-weight:600;padding:8px 12px}
+.opts button.sel{background:var(--leaf2);color:#fff}
+@media (max-width:340px){.opts{grid-template-columns:1fr}}
 .sheet{position:fixed;inset:0;z-index:50;background:rgba(20,12,6,.5);display:flex;align-items:flex-end;justify-content:center}
 .sheet>.panel{background:var(--cream);width:100%;max-width:760px;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px max(14px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px))}
 .panel h3{font:600 18px Lora,serif;margin:0 0 10px;color:var(--leaf)}
@@ -182,6 +187,11 @@ details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--leaf2)
   <div class="row"><button type="button" class="primary" id="lgSave" style="flex:1">Save</button><button type="button" id="lgCancel">Cancel</button></div>
 </div></div>
 
+<div class="sheet" id="callSheet" hidden><div class="panel" role="dialog" aria-label="Call">
+  <h3 id="clTitle"></h3><p class="sub" id="clSub" style="margin:-6px 0 8px"></p>
+  <div id="clBody"></div>
+</div></div>
+
 <div id="chat" hidden>
   <header><div class="wrap"><img src="img/logo.png" alt=""><h1>Ask Josons AI</h1><button type="button" id="chatClose">Close</button></div></header>
   <div class="wrap" style="flex:1;display:flex;flex-direction:column;min-height:0;width:100%">
@@ -205,7 +215,7 @@ const ST = ['New', 'Contacted', 'Replied', 'Sample sent', 'Quoted', 'Customer', 
 const CH = { call: '📞 Call', whatsapp: '💬 WhatsApp', email: '✉️ Email', meeting: '🤝 Meeting', note: '📝 Note', other: 'Other' };
 const LANGS = ['', 'English', 'Malayalam', 'Hindi', 'Tamil', 'Telugu', 'Kannada', 'Marathi', 'Gujarati', 'Bengali', 'Punjabi', 'Odia', 'Assamese', 'Konkani'];
 const stCls = (s) => 'st-' + String(s).replace(/ /g, '-');
-let key = '', S = { cos: [], today: '', ai: false, tab: 'today', shown: 60, lead: null }, remember = true;
+let key = '', S = { cos: [], today: '', ai: false, pending: [], tab: 'today', shown: 60, lead: null }, remember = true;
 try { key = localStorage.getItem('jk') || sessionStorage.getItem('jk') || ''; } catch (e) {}
 const lsGet = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
@@ -223,10 +233,10 @@ function logout(msg) { key = ''; try { localStorage.removeItem('jk'); sessionSto
 async function load(first) {
   try {
     const d = await crm('all');
-    S.cos = d.companies; S.today = d.today; S.ai = d.ai;
+    S.cos = d.companies; S.today = d.today; S.ai = d.ai; S.pending = d.pending || [];
     $('login').hidden = true; $('app').hidden = false; $('tabs').hidden = false; $('fab').hidden = false; $('gmsg').textContent = '';
     $('aiState').textContent = d.ai ? `AI assistant: on (${d.ai === 'gemini' ? 'Gemini' : 'Claude'}).` : 'AI assistant: not switched on yet (add the GEMINI_API_KEY or ANTHROPIC_API_KEY secret).';
-    buildFilters(); route();
+    buildFilters(); route(); if (first) setTimeout(maybePrompt, 600);
   } catch (e) { if (e.message !== 'auth') { $('lmsg').textContent = $('gmsg').textContent = 'Could not reach the server. Check your connection and try again.'; if (first && key) $('login').hidden = false; } }
 }
 const co = (id) => S.cos.find((c) => c.id === Number(id));
@@ -255,7 +265,8 @@ function drawToday() {
   const soon = S.cos.filter((c) => isOpen(c) && c.next_date > t && c.next_date <= wk).sort((a, b) => a.next_date.localeCompare(b.next_date));
   const fresh = S.cos.filter((c) => c.status === 'New' && !c.n_int && c.priority === 'A' && (pc(c).phone || pc(c).email)).slice(0, 8);
   $('stats').innerHTML = `<div class="stat${due.length ? ' hot' : ''}"><b>${due.length}</b><span>Follow up</span></div><div class="stat"><b>${S.cos.filter((c) => !c.n_int).length}</b><span>Not contacted</span></div><div class="stat"><b>${S.cos.filter((c) => c.is_customer).length}</b><span>Customers</span></div><div class="stat"><b>${S.cos.length}</b><span>Total</span></div>`;
-  $('todayList').innerHTML = (due.length ? `<h2>Follow up now</h2>${due.map(card).join('')}` : '<h2>Follow up now</h2><p class="empty">Nothing due. 🎉</p>')
+  const pend = S.pending.slice(0, 6).map((x) => { const c = co(x.company_id); return c ? `<article class="card due"><div class="who">${x.channel === 'whatsapp' ? '💬' : '📞'} ${esc(c.company)}</div><div class="sub">${when(x.at)} · result not recorded yet</div><div class="row" style="margin-top:8px"><button type="button" class="primary sm" data-pendopen="${x.id}">How did it go?</button></div></article>` : ''; }).join('');
+  $('todayList').innerHTML = (pend ? `<h2>Calls to update</h2>${pend}` : '') + (due.length ? `<h2>Follow up now</h2>${due.map(card).join('')}` : '<h2>Follow up now</h2><p class="empty">Nothing due. 🎉</p>')
     + (soon.length ? `<h2>Next 7 days</h2>${soon.map(card).join('')}` : '')
     + (fresh.length ? `<h2>Good first contacts (priority A)</h2>${fresh.map(card).join('')}` : '');
 }
@@ -306,7 +317,7 @@ function drawLead() {
     ${d.contacts.map((k) => { const w = waLink(k.phone, hello(k.name)); return `<div class="card" data-contact="${k.id}">
       <div class="who" style="font-size:15px">${esc(k.name || 'Contact')}${k.role ? ` <span class="sub">· ${esc(k.role)}</span>` : ''}</div>
       <div class="sub">${[k.phone, k.email].filter(Boolean).map(esc).join(' · ') || 'No phone or email'}</div>
-      <div class="row" style="margin-top:8px">${k.phone ? `<a class="btn sm" href="tel:${esc(String(k.phone).replace(/[^\d+]/g, ''))}">📞 Call</a>` : ''}${w ? `<a class="btn sm wa" href="${w}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${k.email ? `<a class="btn sm" href="mailto:${esc(k.email)}?subject=${encodeURIComponent('Josons Spices, Aluva, Kerala')}&body=${encodeURIComponent(hello(k.name) + '\n\nOur brochure: ' + brochureLink(c.language) + '\n\nRegards,\nManu Dominic Parakkal\nJosons Spices, Aluva, Kerala\n+91 89210 63339')}">✉️ Email</a>` : ''}<button type="button" class="sm" data-editk="${k.id}">Edit</button></div></div>`; }).join('')}
+      <div class="row" style="margin-top:8px">${k.phone ? `<a class="btn sm" data-call="${c.id}" data-kind="call" data-who="${esc(k.name || '')}" href="tel:${esc(String(k.phone).replace(/[^\d+]/g, ''))}">📞 Call</a>` : ''}${w ? `<a class="btn sm wa" data-call="${c.id}" data-kind="whatsapp" data-who="${esc(k.name || '')}" href="${w}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${k.email ? `<a class="btn sm" href="mailto:${esc(k.email)}?subject=${encodeURIComponent('Josons Spices, Aluva, Kerala')}&body=${encodeURIComponent(hello(k.name) + '\n\nOur brochure: ' + brochureLink(c.language) + '\n\nRegards,\nManu Dominic Parakkal\nJosons Spices, Aluva, Kerala\n+91 89210 63339')}">✉️ Email</a>` : ''}<button type="button" class="sm" data-editk="${k.id}">Edit</button></div></div>`; }).join('')}
     <div class="row"><button type="button" class="sm" id="addK">+ Add contact</button>${d.contacts.some((k) => waLink(k.phone)) ? `<a class="btn sm wa" target="_blank" rel="noopener" href="${waLink(d.contacts.find((k) => waLink(k.phone)).phone, bro)}">Send brochure on WhatsApp</a>` : ''}</div>
 
     <h2>Next step</h2>
@@ -314,7 +325,7 @@ function drawLead() {
     <div class="saved" id="cfSaved"></div>
 
     <h2>Conversations</h2>
-    ${d.interactions.length ? `<div class="tl">${d.interactions.map((i) => `<div class="it" data-int="${i.id}"><div class="meta"><b>${dShort(i.at)}</b><span>${CH[i.channel] || i.channel}</span><span>${i.direction === 'in' ? 'they contacted us' : 'we contacted them'}</span>${i.by === 'ai' ? '<span class="pill">via AI</span>' : ''}<button type="button" class="sm danger" data-delint="${i.id}" style="margin-left:auto;min-height:30px;padding:2px 10px">Delete</button></div><div class="txt">${esc(i.summary)}</div>${i.next_step ? `<div class="sub">Next: ${esc(i.next_step)}</div>` : ''}</div>`).join('')}</div>` : '<p class="empty">No conversations logged yet.</p>'}
+    ${d.interactions.length ? `<div class="tl">${d.interactions.map((i) => `<div class="it" data-int="${i.id}"><div class="meta"><b>${dShort(i.at)}</b><span>${CH[i.channel] || i.channel}</span><span>${i.direction === 'in' ? 'they contacted us' : 'we contacted them'}</span>${i.by === 'ai' ? '<span class="pill">via AI</span>' : ''}${i.outcome === 'pending' ? `<button type="button" class="sm primary" data-pendopen="${i.id}">How did it go?</button>` : ''}<button type="button" class="sm danger" data-delint="${i.id}" style="margin-left:auto;min-height:30px;padding:2px 10px">Delete</button></div><div class="txt">${esc(i.summary)}</div>${i.next_step ? `<div class="sub">Next: ${esc(i.next_step)}</div>` : ''}</div>`).join('')}</div>` : '<p class="empty">No conversations logged yet.</p>'}
 
     <details style="margin-top:14px"><summary>Company details &amp; notes</summary>
       ${c.product_fit ? `<p class="sub"><b>Likely products:</b> ${esc(c.product_fit)}</p>` : ''}
@@ -452,7 +463,7 @@ function openChat() {
 }
 function bub(t, who) { return `<div class="bub ${who}">${esc(t)}</div>`; }
 function propHtml(p, i, mi) {
-  if (p.type === 'whatsapp') { const w = waLink(p.phone, p.message); return `<div class="prop"><div class="k">WhatsApp draft · ${esc(p.company)}</div><div style="white-space:pre-wrap;margin:6px 0">${esc(p.message)}</div><div class="row">${w ? `<a class="btn sm wa" href="${w}" target="_blank" rel="noopener">Open WhatsApp</a>` : '<span class="sub">No WhatsApp number on file</span>'}<button type="button" class="sm" data-copy="${mi}:${i}">Copy</button></div></div>`; }
+  if (p.type === 'whatsapp') { const w = waLink(p.phone, p.message); return `<div class="prop"><div class="k">WhatsApp draft · ${esc(p.company)}</div><div style="white-space:pre-wrap;margin:6px 0">${esc(p.message)}</div><div class="row">${w ? `<a class="btn sm wa" data-call="${p.company_id || ''}" data-kind="whatsapp" data-who="" href="${w}" target="_blank" rel="noopener">Open WhatsApp</a>` : '<span class="sub">No WhatsApp number on file</span>'}<button type="button" class="sm" data-copy="${mi}:${i}">Copy</button></div></div>`; }
   let k, body;
   if (p.type === 'log') { k = `Save conversation · ${esc(p.company)} (${esc(p.lead_id)})`; body = `<div>${esc(CH[p.channel] || p.channel)} · ${p.direction === 'in' ? 'they contacted us' : 'we contacted them'}${p.at ? ' · ' + dShort(p.at) : ''}</div><div style="white-space:pre-wrap;margin:4px 0">${esc(p.summary)}</div>${p.next_step || p.next_date ? `<div class="sub"><b>Next:</b> ${esc(p.next_step)} ${p.next_date ? '· ' + dShort(p.next_date) : ''}</div>` : ''}${p.status ? `<div class="sub"><b>Status →</b> ${esc(p.status)}</div>` : ''}`; }
   else if (p.type === 'update') { k = `Update · ${esc(p.company)} (${esc(p.lead_id)})`; body = Object.entries(p.changes).map(([a, v]) => `<div class="sub"><b>${esc(a.replace('_', ' '))}:</b> ${esc(String(v))}</div>`).join(''); }
@@ -461,7 +472,7 @@ function propHtml(p, i, mi) {
 }
 function drawChat() {
   const log = $('chatlog');
-  if (!chat.length) { log.innerHTML = `<div class="bub a">Hi Manu! Tell me about a call or message and I'll prepare the note for you to confirm. You can also ask me things like “who haven't I called yet in Gujarat?”.</div><div class="chips">${SUG.map((s) => `<button type="button" class="sm" data-sug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; return; }
+  if (!chat.length) { log.innerHTML = `<div class="bub a">Hi Manu! Tell me about a call or message and I'll prepare the note for you to confirm. You can also ask me things like “who haven't I called yet in Gujarat?”.</div>${pendChips()}<div class="chips">${SUG.map((s) => `<button type="button" class="sm" data-sug="${esc(s)}">${esc(s)}</button>`).join('')}</div>`; return; }
   log.innerHTML = chat.map((m, mi) => m.role === 'user' ? bub(m.content, 'u') : bub(m.content, 'a') + (m.props || []).map((p, i) => m.done?.[i] ? `<div class="prop done">✓ ${p.type === 'log' ? 'Conversation saved' : p.type === 'update' ? 'Updated' : 'Added'}: ${esc(p.company || p.fields?.company || '')}</div>` : m.skip?.[i] ? '' : propHtml(p, i, mi)).join('')).join('') + (chatBusy ? `<div class="bub a" id="busyBub">Working on it… ${Math.round((Date.now() - chatT0) / 1000)}s</div>` : '');
   log.scrollTop = log.scrollHeight;
 }
@@ -585,6 +596,8 @@ window.addEventListener('hashchange', () => { closeOverlays(true); route(); });
 document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => go(b.dataset.tab));
 $('back').onclick = () => history.length > 1 ? history.back() : go('leads');
 document.addEventListener('click', (e) => {
+  const ca = e.target.closest('a[data-call]'); if (ca) { e.preventDefault(); return confirmCall(ca); }
+  const po = e.target.closest('[data-pendopen]'); if (po) { const x = pendById(po.dataset.pendopen); if (x) showOutcome(x); return; }
   const o = e.target.closest('[data-open]'); if (o) return go('lead', o.dataset.open);
   if (e.target.id === 'logBtn') openLog(); if (e.target.id === 'askBtn') openChat();
   if (e.target.id === 'addK') contactForm(null);
@@ -594,6 +607,76 @@ document.addEventListener('click', (e) => {
 });
 ['fq', 'fs', 'fp', 'fst', 'fc'].forEach((id) => $(id).addEventListener(id === 'fq' ? 'input' : 'change', () => { S.shown = 60; drawLeads(); }));
 $('moreBtn').onclick = () => { S.shown += 60; drawLeads(); };
+
+/* ---------- call tracking: confirm before dialing, ask how it went afterwards ---------- */
+const OUTC = {
+  call: [['talked', '✅ Spoke with them'], ['no_answer', '📵 No answer'], ['busy', '⏳ Busy, call back later'], ['dropped', '📉 Call dropped / cut off'], ['wrong_number', '❌ Wrong number'], ['not_now', '🕊 No business need right now'], ['not_interested', '🙅 Not interested'], ['cancelled', "🚫 I didn't call"]],
+  whatsapp: [['talked', '✅ Chatted / they replied'], ['msg_left', '📤 Sent message, no reply yet'], ['no_answer', '📵 WhatsApp call, no answer'], ['dropped', '📉 Call dropped / cut off'], ['wrong_number', '❌ Not on WhatsApp / wrong no.'], ['not_now', '🕊 No business need right now'], ['not_interested', '🙅 Not interested'], ['cancelled', "🚫 I didn't send anything"]],
+};
+const when = (at) => { const d = new Date(at); return isNaN(d) ? '' : `${dShort(at)}, ${d.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}`; };
+const showCall = () => { $('callSheet').hidden = false; document.body.style.overflow = 'hidden'; };
+const hideCall = () => { $('callSheet').hidden = true; if ($('chat').hidden && $('logSheet').hidden) document.body.style.overflow = ''; };
+function laterIds() { try { return JSON.parse(sessionStorage.getItem('jlater') || '[]'); } catch (e) { return []; } }
+function pendChips() {
+  const l = S.pending.filter((x) => co(x.company_id)).slice(0, 4); if (!l.length) return '';
+  return `<div class="bub a">You have ${S.pending.length} call${S.pending.length > 1 ? 's' : ''} with no result yet. How did ${l.length > 1 ? 'they' : 'it'} go?</div><div class="chips" style="margin-bottom:10px">${l.map((x) => `<button type="button" class="sm" data-pendopen="${x.id}">${x.channel === 'whatsapp' ? '💬' : '📞'} ${esc(co(x.company_id).company)}</button>`).join('')}</div>`;
+}
+// Opens a link in a new tab from inside a tap (no popup-blocker or return-value guessing), so the CRM page stays put.
+function openOut(href) { const l = document.createElement('a'); l.href = href; l.target = '_blank'; l.rel = 'noopener'; l.style.display = 'none'; document.body.appendChild(l); l.click(); l.remove(); }
+function confirmCall(a) {
+  const c = co(a.dataset.call); const kind = a.dataset.kind === 'whatsapp' ? 'whatsapp' : 'call';
+  if (!c) { if (kind === 'call') location.href = a.href; else openOut(a.href); return; }
+  const who = a.dataset.who || pc(c).name || '', num = kind === 'call' ? decodeURIComponent(a.getAttribute('href').slice(4)) : (pc(c).phone || '');
+  $('clTitle').textContent = kind === 'call' ? `Call ${who || c.company}?` : `Open WhatsApp for ${who || c.company}?`;
+  $('clSub').textContent = [who ? c.company : '', num].filter(Boolean).join(' · ');
+  $('clBody').innerHTML = `<p class="sub" style="margin:0 0 10px">I'll note it in the log so you can say how it went afterwards.</p><div class="row"><button type="button" class="primary" id="clGo" style="flex:1">${kind === 'call' ? '📞 Call now' : '💬 Open WhatsApp'}</button><button type="button" id="clNo">Cancel</button></div>`;
+  showCall(); $('clNo').onclick = hideCall;
+  $('clGo').onclick = () => {
+    const href = a.href; hideCall();
+    try { fetch('/api/admin/crm/interaction', { method: 'POST', keepalive: true, headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' }, body: JSON.stringify({ company_id: c.id, channel: kind, direction: 'out', outcome: 'pending' }) }).then(() => crm('all')).then((d) => { S.pending = d.pending || []; S.cos = d.companies; }).catch(() => {}); } catch (e) {}
+    if (kind === 'call') location.href = href; else openOut(href);
+  };
+}
+function showOutcome(x) {
+  const c = co(x.company_id); if (!c) return; const kind = x.channel === 'whatsapp' ? 'whatsapp' : 'call';
+  $('clTitle').textContent = kind === 'call' ? `How did the call with ${pc(c).name || c.company} go?` : `How did it go on WhatsApp with ${pc(c).name || c.company}?`;
+  $('clSub').textContent = `${c.company} · ${when(x.at)}`;
+  $('clBody').innerHTML = `<div class="opts">${OUTC[kind].map(([v, l]) => `<button type="button" data-out="${v}">${l}</button>`).join('')}</div><p class="msg" id="clMsg" role="status"></p><div class="row" style="margin-top:6px"><button type="button" id="clLater">Later</button></div>`;
+  showCall();
+  const finish = async (out, text) => {
+    $('clMsg').textContent = 'Saving…';
+    try {
+      const r = await crm('interaction', 'PATCH', { resolve: true, id: x.id, outcome: out, summary: text || undefined });
+      hideCall(); toast(out === 'cancelled' ? 'Removed' : r.next_date ? `Saved · follow-up ${dShort(r.next_date)}` : 'Saved');
+      await load(); if (S.tab === 'lead' && S.lead) await openLead(S.lead); if (!$('chat').hidden) drawChat();
+    } catch (e) { $('clMsg').textContent = e.message === 'auth' ? '' : (e.message === 'already updated' ? 'Already updated.' : 'Could not save. Try again.'); if (e.message === 'already updated') setTimeout(async () => { hideCall(); await load(); }, 900); }
+  };
+  $('clBody').onclick = (e) => {
+    const b = e.target.closest('[data-out]'); if (!b) return; const out = b.dataset.out;
+    if (out !== 'talked') return finish(out);
+    $('clBody').innerHTML = `<label>What was discussed? <textarea id="clText" rows="4" placeholder="e.g. Wants 200 kg turmeric, sample by Friday (or leave empty)"></textarea></label><div class="row" style="margin:6px 0"><button type="button" class="mic sm" id="clAi">🎤 Tell the AI instead</button></div><p class="msg" id="clMsg" role="status"></p><div class="row"><button type="button" class="primary" id="clSave" style="flex:1">Save</button><button type="button" id="clBack">Back</button></div>`;
+    $('clBody').onclick = null; setTimeout(() => $('clText').focus(), 50);
+    $('clSave').onclick = () => finish('talked', $('clText').value.trim());
+    $('clBack').onclick = () => showOutcome(x);
+    $('clAi').onclick = () => { hideCall(); openChat(); $('chText').value = `Call with ${c.company}: `; $('chText').focus(); };
+  };
+  $('clLater').onclick = () => { const l = laterIds(); l.push(x.id); try { sessionStorage.setItem('jlater', JSON.stringify(l)); } catch (e) {} hideCall(); };
+}
+function pendById(id) {
+  id = Number(id); const p = S.pending.find((x) => x.id === id); if (p) return p;
+  const i = S.detail?.interactions?.find((x) => x.id === id); return i ? { id: i.id, company_id: i.company_id, at: i.at, channel: i.channel } : null;
+}
+function maybePrompt() {
+  if (!$('callSheet').hidden || !$('chat').hidden || !$('logSheet').hidden || $('app').hidden) return;
+  const skip = laterIds(), now = Date.now();
+  const x = S.pending.find((p) => !skip.includes(p.id) && now - Date.parse(p.at) > 1500 && now - Date.parse(p.at) < 12 * 3600e3);
+  if (x) showOutcome(x);
+}
+let lastVis = 0;
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState !== 'visible' || !key || $('app').hidden || Date.now() - lastVis < 3000) return; lastVis = Date.now();
+  try { const d = await crm('all'); S.cos = d.companies; S.pending = d.pending || []; S.today = d.today; if (S.tab === 'today') drawToday(); maybePrompt(); } catch (e) {}
+});
 /* overlays (sheets): the phone's Back button closes them */
 function overlay(id) { $(id).hidden = false; history.pushState({ o: id }, ''); document.body.style.overflow = 'hidden'; }
 function closeOverlays(fromHash) { stopTalk(); let any = false; ['logSheet', 'chat'].forEach((id) => { if (!$(id).hidden) { $(id).hidden = true; any = true; } }); document.body.style.overflow = ''; if (any && !fromHash && history.state?.o) history.back(); }

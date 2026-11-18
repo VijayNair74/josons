@@ -73,3 +73,7 @@ Run it from inside the site folder.
 - **More:** import and CSV backups. Export a backup now and then.
 
 **Privacy:** the leads are public business contacts, but still personal data. Keep the password private, and note that what Manu types into the AI box is sent to the chosen AI provider (Google or Anthropic) to process.
+
+## Call tracking
+
+Tapping **Call** or **WhatsApp** on a contact asks for confirmation, opens the dialer or WhatsApp, and records a *pending* entry in the conversation log (`interactions.outcome = 'pending'`; the column is added automatically). When Manu comes back to the page, a sheet asks how it went with one-tap answers (spoke, no answer, busy, dropped, wrong number, no business need now, not interested, didn't call). "No answer", "busy", "dropped", "no business need" and "left a message" set a suggested follow-up date unless a later one is already set. Unanswered entries show on Today under "Calls to update", on the lead's timeline, and as quick buttons in the chat; the AI also knows about them and completes the pending entry instead of adding a duplicate.
